@@ -15,30 +15,40 @@ class ActionButtons extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TextButton(
-          onPressed: onCancelPressed,
-          child: Text(
-            '취소',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              height: 1.4,
-              letterSpacing: -0.025,
-              color: Colors.black,
+        GestureDetector(
+          onTap: onCancelPressed,
+          child: Container(
+            width: 160,
+            height: 40,
+            alignment: Alignment.center,
+            child: Text(
+              '취소',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                height: 1.4,
+                letterSpacing: -0.025,
+                color: Colors.black,
+              ),
             ),
           ),
         ),
         const SizedBox(width: 35),
-        TextButton(
-          onPressed: onSubmitPressed,
-          child: Text(
-            '등록',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              height: 1.4,
-              letterSpacing: -0.025,
-              color: Colors.black,
+        GestureDetector(
+          onTap: onSubmitPressed,
+          child: Container(
+            width: 160,
+            height: 40,
+            alignment: Alignment.center,
+            child: Text(
+              '등록',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                height: 1.4,
+                letterSpacing: -0.025,
+                color: Colors.black,
+              ),
             ),
           ),
         ),

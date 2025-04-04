@@ -7,6 +7,7 @@ import '../widgets/category_setting_box.dart';
 import '../widgets/priority_setting_box.dart';
 import '../widgets/memo_input.dart';
 import '../widgets/calendar_display_selector.dart';
+import '../widgets/action_buttons.dart';
 import '../../domain/models/priority.dart';
 
 class AddSchedulePage extends StatefulWidget {
@@ -110,6 +111,16 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                       });
                     },
                   ),
+                  const SizedBox(height: 32),
+                  ActionButtons(
+                    onCancelPressed: () {
+                      // TODO: 취소 처리
+                    },
+                    onSubmitPressed: () {
+                      // TODO: 등록 처리
+                    },
+                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),

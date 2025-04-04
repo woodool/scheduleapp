@@ -83,8 +83,12 @@ class DateTimeSelector extends StatelessWidget {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Icon(Icons.arrow_forward, size: 20),
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              child: Image(
+                image: AssetImage('assets/images/arrow-right.png'),
+                width: 20,
+                height: 20,
+              ),
             ),
             GestureDetector(
               onTap: onEndDateTap,

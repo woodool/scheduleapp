@@ -86,8 +86,9 @@ class DateTimeSelector extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 4),
               child: Image(
                 image: AssetImage('assets/images/arrow-right.png'),
-                width: 20,
-                height: 20,
+                width: 28,
+                height: 28,
+                fit: BoxFit.contain,
               ),
             ),
             GestureDetector(

@@ -37,7 +37,6 @@ class DateTimeSelector extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
               onTap: onStartDateTap,

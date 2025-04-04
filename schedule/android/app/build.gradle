@@ -1,0 +1,8 @@
+android {
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+} 

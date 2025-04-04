@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/add_schedule_button.dart';
+import 'add_schedule_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,7 +14,15 @@ class HomePage extends StatelessWidget {
       body: const Center(
         child: Text('일정 목록이 여기에 표시됩니다.'),
       ),
-      floatingActionButton: const AddScheduleButton(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddSchedulePage()),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 } 

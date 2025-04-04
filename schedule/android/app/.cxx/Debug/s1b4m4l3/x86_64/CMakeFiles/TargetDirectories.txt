@@ -1,0 +1,2 @@
+C:/Users/wooji/StudioProjects/schedule/schedule/android/app/.cxx/Debug/s1b4m4l3/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/wooji/StudioProjects/schedule/schedule/android/app/.cxx/Debug/s1b4m4l3/x86_64/CMakeFiles/rebuild_cache.dir

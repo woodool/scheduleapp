@@ -1,0 +1,2 @@
+C:/Users/wooji/StudioProjects/schedule/schedule/android/app/.cxx/Debug/s1b4m4l3/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/wooji/StudioProjects/schedule/schedule/android/app/.cxx/Debug/s1b4m4l3/armeabi-v7a/CMakeFiles/rebuild_cache.dir

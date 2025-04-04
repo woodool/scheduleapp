@@ -53,15 +53,20 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                     },
                   ),
                   const SizedBox(height: 32),
-                  DateTimeSelector(
-                    startDate: _startDate,
-                    endDate: _endDate,
-                    onStartDateTap: () {
-                      // TODO: 시작 날짜/시간 선택
-                    },
-                    onEndDateTap: () {
-                      // TODO: 종료 날짜/시간 선택
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DateTimeSelector(
+                        startDate: _startDate,
+                        endDate: _endDate,
+                        onStartDateTap: () {
+                          // TODO: 시작 날짜/시간 선택
+                        },
+                        onEndDateTap: () {
+                          // TODO: 종료 날짜/시간 선택
+                        },
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 32),
                   Row(

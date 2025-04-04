@@ -22,25 +22,21 @@ class DateTimeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '날짜 및 시간',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
-            ),
-          ],
+        const Text(
+          '날짜 및 시간',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            height: 1.4,
+            letterSpacing: -0.025,
+            color: Colors.black,
+            fontFamily: 'Pretendard',
+          ),
         ),
         const SizedBox(height: 5),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
               onTap: onStartDateTap,
@@ -48,13 +44,6 @@ class DateTimeSelector extends StatelessWidget {
                 width: 150,
                 height: 104,
                 padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 30),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.black,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,10 +53,13 @@ class DateTimeSelector extends StatelessWidget {
                       height: 22,
                       child: Text(
                         '${startDate.month}월 ${startDate.day}일 (${_getWeekday(startDate)})',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          height: 1.4,
+                          letterSpacing: -0.025,
                           color: Colors.black,
+                          fontFamily: 'Pretendard',
                         ),
                       ),
                     ),
@@ -76,10 +68,13 @@ class DateTimeSelector extends StatelessWidget {
                       height: 22,
                       child: Text(
                         '오후 ${startDate.hour > 12 ? startDate.hour - 12 : startDate.hour}시',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
+                          height: 1.4,
+                          letterSpacing: -0.025,
                           color: Colors.black,
+                          fontFamily: 'Pretendard',
                         ),
                       ),
                     ),
@@ -101,13 +96,6 @@ class DateTimeSelector extends StatelessWidget {
                 width: 150,
                 height: 104,
                 padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 30),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.black,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,10 +105,13 @@ class DateTimeSelector extends StatelessWidget {
                       height: 22,
                       child: Text(
                         '${endDate.month}월 ${endDate.day}일 (${_getWeekday(endDate)})',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          height: 1.4,
+                          letterSpacing: -0.025,
                           color: Colors.black,
+                          fontFamily: 'Pretendard',
                         ),
                       ),
                     ),
@@ -129,10 +120,13 @@ class DateTimeSelector extends StatelessWidget {
                       height: 22,
                       child: Text(
                         '오후 ${endDate.hour > 12 ? endDate.hour - 12 : endDate.hour}시',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
+                          height: 1.4,
+                          letterSpacing: -0.025,
                           color: Colors.black,
+                          fontFamily: 'Pretendard',
                         ),
                       ),
                     ),

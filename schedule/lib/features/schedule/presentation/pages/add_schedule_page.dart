@@ -25,30 +25,32 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              TitleInput(
-                controller: _titleController,
-                onChanged: (value) {
-                  // TODO: 제목 변경 처리
-                },
-              ),
-              const SizedBox(height: 32),
-              DateTimeSelector(
-                startDate: _startDate,
-                endDate: _endDate,
-                onStartDateTap: () {
-                  // TODO: 시작 날짜/시간 선택
-                },
-                onEndDateTap: () {
-                  // TODO: 종료 날짜/시간 선택
-                },
-              ),
-            ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                TitleInput(
+                  controller: _titleController,
+                  onChanged: (value) {
+                    // TODO: 제목 변경 처리
+                  },
+                ),
+                const SizedBox(height: 32),
+                DateTimeSelector(
+                  startDate: _startDate,
+                  endDate: _endDate,
+                  onStartDateTap: () {
+                    // TODO: 시작 날짜/시간 선택
+                  },
+                  onEndDateTap: () {
+                    // TODO: 종료 날짜/시간 선택
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

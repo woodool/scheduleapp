@@ -82,13 +82,12 @@ class DateTimeSelector extends StatelessWidget {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 4),
-              child: Image(
-                image: AssetImage('assets/images/arrow-right.png'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Image.asset(
+                'assets/images/arrow-right.png',
                 width: 28,
                 height: 28,
-                fit: BoxFit.contain,
               ),
             ),
             GestureDetector(

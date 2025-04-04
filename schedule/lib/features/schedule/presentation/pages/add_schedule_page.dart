@@ -5,6 +5,8 @@ import '../widgets/repeat_setting_box.dart';
 import '../widgets/notification_setting_box.dart';
 import '../widgets/category_setting_box.dart';
 import '../widgets/priority_setting_box.dart';
+import '../widgets/memo_input.dart';
+import '../widgets/calendar_display_selector.dart';
 import '../../domain/models/priority.dart';
 
 class AddSchedulePage extends StatefulWidget {
@@ -16,16 +18,19 @@ class AddSchedulePage extends StatefulWidget {
 
 class _AddSchedulePageState extends State<AddSchedulePage> {
   final _titleController = TextEditingController();
+  final _memoController = TextEditingController();
   final _startDate = DateTime(2023, 12, 12, 22); // 12월 12일 오후 10시
   final _endDate = DateTime(2023, 12, 15, 23);   // 12월 15일 오후 11시
   String? _selectedRepeat;
   String? _selectedNotification;
   String? _selectedCategory;
   Priority? _selectedPriority;
+  CalendarDisplayType _calendarDisplayType = CalendarDisplayType.show; // 기본값은 달력 표시
 
   @override
   void dispose() {
     _titleController.dispose();
+    _memoController.dispose();
     super.dispose();
   }
 
@@ -81,6 +86,22 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                       selectedPriority: _selectedPriority,
                     ),
                   ],
+                ),
+                const SizedBox(height: 32),
+                MemoInput(
+                  controller: _memoController,
+                  onChanged: (value) {
+                    // TODO: 메모 변경 처리
+                  },
+                ),
+                const SizedBox(height: 32),
+                CalendarDisplaySelector(
+                  selectedType: _calendarDisplayType,
+                  onTypeSelected: (type) {
+                    setState(() {
+                      _calendarDisplayType = type;
+                    });
+                  },
                 ),
               ],
             ),

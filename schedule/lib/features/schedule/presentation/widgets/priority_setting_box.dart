@@ -19,15 +19,29 @@ class PrioritySettingBox extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
+            color: Colors.black,
           ),
         ),
         const SizedBox(height: 5),
         Container(
-          width: 84,
-          height: 22,
+          width: 140,
+          height: 60,
           decoration: BoxDecoration(
-            color: selectedPriority?.color ?? Priority.none.color,
-            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              width: 1,
+              color: Colors.black,
+            ),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Center(
+            child: Container(
+              width: 84,
+              height: 22,
+              decoration: BoxDecoration(
+                color: selectedPriority?.color ?? Priority.none.color,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
           ),
         ),
       ],

@@ -18,6 +18,7 @@ class CategorySettingBox extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
+            color: Colors.black,
           ),
         ),
         const SizedBox(height: 5),
@@ -38,6 +39,7 @@ class CategorySettingBox extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
+                color: Colors.black,
               ),
             ),
           ),

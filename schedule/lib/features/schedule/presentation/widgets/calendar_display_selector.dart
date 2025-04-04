@@ -18,19 +18,13 @@ class CalendarDisplaySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: () => onTypeSelected?.call(CalendarDisplayType.hide),
           child: Container(
             width: 160,
             height: 60,
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: Colors.black,
-              ),
-              borderRadius: BorderRadius.circular(15),
-            ),
             child: Center(
               child: Text(
                 '달력 미표시',
@@ -51,13 +45,6 @@ class CalendarDisplaySelector extends StatelessWidget {
           child: Container(
             width: 160,
             height: 60,
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: Colors.black,
-              ),
-              borderRadius: BorderRadius.circular(15),
-            ),
             child: Center(
               child: Text(
                 '달력 표시',

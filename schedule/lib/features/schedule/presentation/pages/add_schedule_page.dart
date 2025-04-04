@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import '../widgets/title_input.dart';
 import '../widgets/date_time_selector.dart';
+import '../widgets/repeat_setting_box.dart';
+import '../widgets/notification_setting_box.dart';
+import '../widgets/category_setting_box.dart';
+import '../widgets/priority_setting_box.dart';
+import '../../domain/models/priority.dart';
 
 class AddSchedulePage extends StatefulWidget {
   const AddSchedulePage({super.key});
@@ -13,6 +18,10 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   final _titleController = TextEditingController();
   final _startDate = DateTime(2023, 12, 12, 22); // 12월 12일 오후 10시
   final _endDate = DateTime(2023, 12, 15, 23);   // 12월 15일 오후 11시
+  String? _selectedRepeat;
+  String? _selectedNotification;
+  String? _selectedCategory;
+  Priority? _selectedPriority;
 
   @override
   void dispose() {
@@ -48,6 +57,30 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                   onEndDateTap: () {
                     // TODO: 종료 날짜/시간 선택
                   },
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    RepeatSettingBox(
+                      selectedRepeat: _selectedRepeat,
+                    ),
+                    const SizedBox(width: 35),
+                    NotificationSettingBox(
+                      selectedNotification: _selectedNotification,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    CategorySettingBox(
+                      selectedCategory: _selectedCategory,
+                    ),
+                    const SizedBox(width: 35),
+                    PrioritySettingBox(
+                      selectedPriority: _selectedPriority,
+                    ),
+                  ],
                 ),
               ],
             ),

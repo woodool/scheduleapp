@@ -15,36 +15,40 @@ class TitleInput extends StatelessWidget {
     return Container(
       width: 335,
       height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-      child: TextField(
-        controller: controller,
-        onChanged: onChanged,
-        style: const TextStyle(
-          fontSize: 16,
-          height: 1.4,
-          letterSpacing: -0.025,
-          color: Colors.black,
-          fontFamily: 'Pretendard',
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.black,
+            width: 1,
+          ),
         ),
-        decoration: const InputDecoration(
-          hintText: '제목',
-          hintStyle: TextStyle(
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+        child: TextField(
+          controller: controller,
+          onChanged: onChanged,
+          style: const TextStyle(
             fontSize: 16,
             height: 1.4,
             letterSpacing: -0.025,
-            color: Color(0xFF767676),
+            color: Colors.black,
             fontFamily: 'Pretendard',
           ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black12),
+          decoration: const InputDecoration(
+            hintText: '제목',
+            hintStyle: TextStyle(
+              fontSize: 16,
+              height: 1.4,
+              letterSpacing: -0.025,
+              color: Color(0xFF767676),
+              fontFamily: 'Pretendard',
+            ),
+            border: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            contentPadding: EdgeInsets.zero,
           ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black12),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black12),
-          ),
-          contentPadding: EdgeInsets.zero,
         ),
       ),
     );

@@ -1,45 +1,38 @@
 import 'package:flutter/material.dart';
 
-enum RepeatType {
-  none,
-  daily,
-  weekly,
-  monthly,
-}
-
 class RepeatSettingBox extends StatelessWidget {
-  final RepeatType repeatType;
-  final int? monthlyDay;
-  final ValueChanged<RepeatType>? onTypeChanged;
-  final ValueChanged<int>? onMonthlyDayChanged;
+  final List<bool> selectedDays;
+  final ValueChanged<List<bool>>? onDaysChanged;
 
   const RepeatSettingBox({
     super.key,
-    this.repeatType = RepeatType.none,
-    this.monthlyDay,
-    this.onTypeChanged,
-    this.onMonthlyDayChanged,
+    this.selectedDays = const [false, false, false, false, false, false, false],
+    this.onDaysChanged,
   });
 
-  String _getRepeatText() {
-    switch (repeatType) {
-      case RepeatType.none:
-        return '반복 안함';
-      case RepeatType.daily:
-        return '매일';
-      case RepeatType.weekly:
-        return '매주';
-      case RepeatType.monthly:
-        if (monthlyDay != null) {
-          return '매월 ${monthlyDay}일';
-        }
-        return '매월';
+  String _getSelectedDaysText() {
+    if (selectedDays.every((day) => !day)) {
+      return '반복 안함';
     }
+
+    const weekdays = ['월', '화', '수', '목', '금', '토', '일'];
+    final selectedWeekdays = <String>[];
+    
+    for (int i = 0; i < selectedDays.length; i++) {
+      if (selectedDays[i]) {
+        selectedWeekdays.add(weekdays[i]);
+      }
+    }
+    
+    if (selectedWeekdays.length >= 4) {
+      return '매주 ${selectedWeekdays.length}일';
+    }
+    
+    return '매주 ${selectedWeekdays.join(', ')}';
   }
 
-  Future<void> _showRepeatSelector(BuildContext context) async {
-    RepeatType tempType = repeatType;
-    int tempMonthlyDay = monthlyDay ?? 1;
+  Future<void> _showDaySelector(BuildContext context) async {
+    List<bool> tempSelectedDays = List.from(selectedDays);
     
     await showDialog(
       context: context,
@@ -60,80 +53,65 @@ class RepeatSettingBox extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    RadioListTile<RepeatType>(
+                    RadioListTile<int>(
                       title: const Text('반복 안함', style: TextStyle(fontSize: 14)),
-                      value: RepeatType.none,
-                      groupValue: tempType,
+                      value: 0,
+                      groupValue: tempSelectedDays.every((day) => !day) ? 0 : 1,
                       contentPadding: const EdgeInsets.symmetric(vertical: 4),
                       onChanged: (value) {
                         setState(() {
-                          tempType = value!;
+                          tempSelectedDays = List.filled(7, false);
                         });
                       },
                     ),
-                    RadioListTile<RepeatType>(
+                    RadioListTile<int>(
                       title: const Text('매일', style: TextStyle(fontSize: 14)),
-                      value: RepeatType.daily,
-                      groupValue: tempType,
+                      value: 2,
+                      groupValue: tempSelectedDays.every((day) => day) ? 2 : 1,
                       contentPadding: const EdgeInsets.symmetric(vertical: 4),
                       onChanged: (value) {
                         setState(() {
-                          tempType = value!;
+                          tempSelectedDays = List.filled(7, true);
                         });
                       },
                     ),
-                    RadioListTile<RepeatType>(
+                    RadioListTile<int>(
                       title: const Text('매주', style: TextStyle(fontSize: 14)),
-                      value: RepeatType.weekly,
-                      groupValue: tempType,
+                      value: 1,
+                      groupValue: (!tempSelectedDays.every((day) => !day) && !tempSelectedDays.every((day) => day)) ? 1 : (tempSelectedDays.every((day) => day) ? 2 : 0),
                       contentPadding: const EdgeInsets.symmetric(vertical: 4),
                       onChanged: (value) {
                         setState(() {
-                          tempType = value!;
+                          if (tempSelectedDays.every((day) => !day)) {
+                            tempSelectedDays[0] = true; // 월요일 선택
+                          }
                         });
                       },
                     ),
-                    RadioListTile<RepeatType>(
-                      title: const Text('매월', style: TextStyle(fontSize: 14)),
-                      value: RepeatType.monthly,
-                      groupValue: tempType,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      onChanged: (value) {
-                        setState(() {
-                          tempType = value!;
-                        });
-                      },
-                    ),
-                    if (tempType == RepeatType.monthly)
+                    if ((!tempSelectedDays.every((day) => !day) && !tempSelectedDays.every((day) => day)))
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0, top: 12.0, bottom: 8.0),
-                        child: Row(
+                        padding: const EdgeInsets.only(left: 32.0),
+                        child: Column(
                           children: [
-                            const Text('매월 ', style: TextStyle(fontSize: 14)),
-                            SizedBox(
-                              width: 50,
-                              child: TextField(
-                                controller: TextEditingController(text: tempMonthlyDay.toString()),
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                                  border: OutlineInputBorder(),
-                                ),
-                                onChanged: (value) {
-                                  if (value.isNotEmpty) {
-                                    int day = int.parse(value);
-                                    if (day > 0 && day <= 31) {
-                                      setState(() {
-                                        tempMonthlyDay = day;
-                                      });
-                                    }
-                                  }
-                                },
-                              ),
+                            Row(
+                              children: [
+                                _buildDayCheckbox(context, setState, 0, '월', tempSelectedDays),
+                                _buildDayCheckbox(context, setState, 1, '화', tempSelectedDays),
+                                _buildDayCheckbox(context, setState, 2, '수', tempSelectedDays),
+                              ],
                             ),
-                            const Text(' 일', style: TextStyle(fontSize: 14)),
+                            Row(
+                              children: [
+                                _buildDayCheckbox(context, setState, 3, '목', tempSelectedDays),
+                                _buildDayCheckbox(context, setState, 4, '금', tempSelectedDays),
+                                _buildDayCheckbox(context, setState, 5, '토', tempSelectedDays),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                _buildDayCheckbox(context, setState, 6, '일', tempSelectedDays),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -156,10 +134,7 @@ class RepeatSettingBox extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                onTypeChanged?.call(tempType);
-                if (tempType == RepeatType.monthly) {
-                  onMonthlyDayChanged?.call(tempMonthlyDay);
-                }
+                onDaysChanged?.call(tempSelectedDays);
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
@@ -173,6 +148,40 @@ class RepeatSettingBox extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildDayCheckbox(BuildContext context, StateSetter setState, int index, String day, List<bool> tempSelectedDays) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            tempSelectedDays[index] = !tempSelectedDays[index];
+          });
+        },
+        child: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: tempSelectedDays[index] ? Colors.blue : Colors.transparent,
+            border: Border.all(
+              color: tempSelectedDays[index] ? Colors.blue : Colors.grey,
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              day,
+              style: TextStyle(
+                fontSize: 14,
+                color: tempSelectedDays[index] ? Colors.white : Colors.black,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -191,7 +200,7 @@ class RepeatSettingBox extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         GestureDetector(
-          onTap: () => _showRepeatSelector(context),
+          onTap: () => _showDaySelector(context),
           child: Container(
             width: 140,
             height: 60,
@@ -205,12 +214,15 @@ class RepeatSettingBox extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                _getRepeatText(),
+                _getSelectedDaysText(),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
               ),
             ),
           ),

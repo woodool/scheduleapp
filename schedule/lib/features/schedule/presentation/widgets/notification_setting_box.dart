@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../../domain/models/schedule.dart';
 
 enum NotificationType {
   none,
@@ -12,16 +11,16 @@ enum NotificationType {
 
 class NotificationSettingBox extends StatelessWidget {
   final NotificationType notificationType;
-  final DateTime? customDateTime;
+  final int? customMinutes;
   final ValueChanged<NotificationType>? onTypeChanged;
-  final ValueChanged<DateTime>? onCustomDateTimeChanged;
+  final ValueChanged<int>? onCustomMinutesChanged;
 
   const NotificationSettingBox({
     super.key,
     this.notificationType = NotificationType.none,
-    this.customDateTime,
+    this.customMinutes,
     this.onTypeChanged,
-    this.onCustomDateTimeChanged,
+    this.onCustomMinutesChanged,
   });
 
   String _getNotificationText() {
@@ -35,20 +34,13 @@ class NotificationSettingBox extends StatelessWidget {
       case NotificationType.oneDay:
         return '1일 전';
       case NotificationType.custom:
-        if (customDateTime != null) {
-          final now = DateTime.now();
-          final difference = customDateTime!.difference(now);
-          final days = difference.inDays;
-          final hours = difference.inHours % 24;
-          final minutes = difference.inMinutes % 60;
-          
-          if (days > 0) {
-            return '$days일 ${hours > 0 ? '$hours시간' : ''} 전';
-          } else if (hours > 0) {
+        if (customMinutes != null) {
+          final hours = customMinutes! ~/ 60;
+          final minutes = customMinutes! % 60;
+          if (hours > 0) {
             return '$hours시간 ${minutes > 0 ? '$minutes분' : ''} 전';
-          } else {
-            return '$minutes분 전';
           }
+          return '$minutes분 전';
         }
         return '직접 설정';
     }
@@ -56,10 +48,8 @@ class NotificationSettingBox extends StatelessWidget {
 
   Future<void> _showNotificationSelector(BuildContext context) async {
     NotificationType tempType = notificationType;
-    DateTime? tempDateTime = customDateTime;
-    bool isMinutes = true;
-    int selectedValue = 0;
-
+    int tempMinutes = customMinutes ?? 5;
+    
     await showDialog(
       context: context,
       builder: (context) {
@@ -71,6 +61,7 @@ class NotificationSettingBox extends StatelessWidget {
                 width: 300,
                 height: 320,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 16),
@@ -79,17 +70,6 @@ class NotificationSettingBox extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        _getNotificationText(),
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
                         ),
                       ),
                     ),
@@ -128,55 +108,163 @@ class NotificationSettingBox extends StatelessWidget {
                             tempType,
                             (value) => tempType = value,
                           ),
-                          _buildRadioListTile(
-                            context,
-                            setState,
-                            NotificationType.custom,
-                            '직접 설정',
-                            tempType,
-                            (value) => tempType = value,
-                          ),
-                          if (tempType == NotificationType.custom)
-                            Container(
-                              height: 100,
+                          InkWell(
+                            onTap: () async {
+                              final result = await _showCustomTimeSelector(context, tempMinutes);
+                              if (result != null) {
+                                setState(() {
+                                  tempType = NotificationType.custom;
+                                  tempMinutes = result;
+                                });
+                              }
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                               child: Row(
                                 children: [
-                                  Expanded(
-                                    child: CupertinoPicker(
-                                      itemExtent: 44,
-                                      onSelectedItemChanged: (index) {
-                                        setState(() {
-                                          bool newIsMinutes = index == 0;
-                                          if (newIsMinutes != isMinutes) {
-                                            isMinutes = newIsMinutes;
-                                            selectedValue = selectedValue.clamp(0, isMinutes ? 59 : 23);
-                                          }
-                                        });
-                                      },
-                                      children: [
-                                        Text('분'),
-                                        Text('시간'),
-                                      ],
+                                  Icon(
+                                    Icons.add_circle_outline,
+                                    size: 24,
+                                    color: Colors.blue,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    '직접 설정',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.blue,
                                     ),
                                   ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: CupertinoPicker(
-                                      itemExtent: 44,
-                                      onSelectedItemChanged: (index) {
-                                        setState(() {
-                                          selectedValue = index;
-                                        });
-                                      },
-                                      children: List.generate(
-                                        isMinutes ? 60 : 24,
-                                        (index) => Text('$index'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('취소'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    onTypeChanged?.call(tempType);
+                    if (tempType == NotificationType.custom) {
+                      onCustomMinutesChanged?.call(tempMinutes);
+                    }
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('확인'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<int?> _showCustomTimeSelector(BuildContext context, int initialMinutes) async {
+    int selectedValue = initialMinutes;
+    bool isMinutes = true;
+    
+    return showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                width: 300,
+                height: 320,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        '직접 설정',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          // 왼쪽: 숫자 선택
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 24),
+                              child: CupertinoPicker(
+                                itemExtent: 44,
+                                onSelectedItemChanged: (index) {
+                                  setState(() {
+                                    selectedValue = index;
+                                  });
+                                },
+                                children: List<Widget>.generate(
+                                  isMinutes ? 60 : 24,
+                                  (index) => Center(
+                                    child: Text(
+                                      '$index',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          // 오른쪽: 분/시간 선택
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 24),
+                              child: CupertinoPicker(
+                                itemExtent: 44,
+                                onSelectedItemChanged: (index) {
+                                  setState(() {
+                                    bool newIsMinutes = index == 0;
+                                    if (newIsMinutes != isMinutes) {
+                                      isMinutes = newIsMinutes;
+                                      selectedValue = selectedValue.clamp(0, isMinutes ? 59 : 23);
+                                    }
+                                  });
+                                },
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      '분',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: isMinutes ? Colors.blue : Colors.black,
+                                        fontWeight: isMinutes ? FontWeight.bold : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      '시간',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: !isMinutes ? Colors.blue : Colors.black,
+                                        fontWeight: !isMinutes ? FontWeight.bold : FontWeight.normal,
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
+                          ),
                         ],
                       ),
                     ),
@@ -190,21 +278,8 @@ class NotificationSettingBox extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    if (tempType == NotificationType.custom) {
-                      final now = DateTime.now();
-                      if (isMinutes) {
-                        tempDateTime = now.add(Duration(minutes: selectedValue));
-                      } else {
-                        tempDateTime = now.add(Duration(hours: selectedValue));
-                      }
-                    } else {
-                      tempDateTime = null;
-                    }
-                    onTypeChanged?.call(tempType);
-                    if (tempDateTime != null) {
-                      onCustomDateTimeChanged?.call(tempDateTime!);
-                    }
-                    Navigator.of(context).pop();
+                    final minutes = isMinutes ? selectedValue : selectedValue * 60;
+                    Navigator.of(context).pop(minutes);
                   },
                   child: Text('확인'),
                 ),
@@ -216,16 +291,49 @@ class NotificationSettingBox extends StatelessWidget {
     );
   }
 
+  Widget _buildUnitButton(
+    BuildContext context,
+    String text,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blue : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? Colors.blue : Colors.grey,
+            width: 1,
+          ),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 16,
+            color: isSelected ? Colors.white : Colors.grey,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildRadioListTile(
     BuildContext context,
     StateSetter setState,
     NotificationType type,
     String title,
     NotificationType selectedType,
-    ValueChanged<NotificationType> onChanged,
+    Function(NotificationType) onChanged,
   ) {
     return RadioListTile<NotificationType>(
-      title: Text(title),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 16),
+      ),
       value: type,
       groupValue: selectedType,
       onChanged: (value) {
@@ -233,6 +341,7 @@ class NotificationSettingBox extends StatelessWidget {
           onChanged(value!);
         });
       },
+      contentPadding: EdgeInsets.symmetric(horizontal: 16),
     );
   }
 
@@ -253,23 +362,23 @@ class NotificationSettingBox extends StatelessWidget {
         GestureDetector(
           onTap: () => _showNotificationSelector(context),
           child: Container(
-            width: 140,
-            height: 60,
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: Colors.black,
-              ),
-              borderRadius: BorderRadius.circular(15),
+          width: 140,
+          height: 60,
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: Colors.black,
             ),
-            child: Center(
-              child: Text(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Center(
+            child: Text(
                 _getNotificationText(),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
                 ),
               ),
             ),

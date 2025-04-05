@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class CategorySettingBox extends StatelessWidget {
-  final String category;
+  final String? selectedCategory;
   final ValueChanged<String>? onCategoryChanged;
 
   const CategorySettingBox({
     super.key,
-    this.category = '업무',
+    this.selectedCategory,
     this.onCategoryChanged,
   });
 
-  final List<String> categories = [
+  static const List<String> categories = [
     '업무',
-    '개인',
-    '가족',
-    '친구',
-    '기타',
+    '학업',
+    '약속',
+    '운동',
+    '취미',
+    '-',
   ];
 
-  Future<void> _showCategorySelector(BuildContext context) async {
-    String tempCategory = category;
+  String _getCategoryText() {
+    return selectedCategory ?? '-';
+  }
 
+  Future<void> _showCategorySelector(BuildContext context) async {
+    String tempCategory = selectedCategory ?? categories.last;
+    
     await showDialog(
       context: context,
       builder: (context) {
@@ -55,21 +61,27 @@ class CategorySettingBox extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: categories.length,
-                        itemBuilder: (context, index) {
-                          final cat = categories[index];
-                          return RadioListTile<String>(
-                            title: Text(cat),
-                            value: cat,
-                            groupValue: tempCategory,
-                            onChanged: (value) {
-                              setState(() {
-                                tempCategory = value!;
-                              });
-                            },
-                          );
-                        },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 24),
+                        child: CupertinoPicker(
+                          itemExtent: 44,
+                          onSelectedItemChanged: (index) {
+                            setState(() {
+                              tempCategory = categories[index];
+                            });
+                          },
+                          children: categories.map((category) {
+                            return Center(
+                              child: Text(
+                                category,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                   ],
@@ -124,7 +136,7 @@ class CategorySettingBox extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                category,
+                _getCategoryText(),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

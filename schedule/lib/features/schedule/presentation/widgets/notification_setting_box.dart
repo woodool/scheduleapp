@@ -166,8 +166,8 @@ class NotificationSettingBox extends StatelessWidget {
   }
 
   Future<int?> _showCustomTimeSelector(BuildContext context, int initialMinutes) async {
-    int hours = initialMinutes ~/ 60;
-    int minutes = initialMinutes % 60;
+    int selectedValue = 0;
+    bool isMinutes = true; // true면 분, false면 시간
     
     return showDialog<int>(
       context: context,
@@ -184,7 +184,7 @@ class NotificationSettingBox extends StatelessWidget {
                       padding: EdgeInsets.all(16),
                       alignment: Alignment.center,
                       child: Text(
-                        '${hours > 0 ? '$hours시간 ' : ''}${minutes}분',
+                        isMinutes ? '$selectedValue분' : '$selectedValue시간',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -194,40 +194,53 @@ class NotificationSettingBox extends StatelessWidget {
                     Expanded(
                       child: Row(
                         children: [
+                          // 왼쪽: 숫자 선택
                           Expanded(
+                            flex: 2,
                             child: CupertinoPicker(
                               itemExtent: 44,
                               onSelectedItemChanged: (index) {
                                 setState(() {
-                                  hours = index;
+                                  selectedValue = index;
                                 });
                               },
-                              children: List<Widget>.generate(24, (index) {
-                                return Center(
+                              children: List<Widget>.generate(
+                                isMinutes ? 60 : 24,
+                                (index) => Center(
                                   child: Text(
-                                    '$index시간',
+                                    '$index',
                                     style: TextStyle(fontSize: 20),
                                   ),
-                                );
-                              }),
+                                ),
+                              ),
                             ),
                           ),
+                          // 오른쪽: 분/시간 선택
                           Expanded(
-                            child: CupertinoPicker(
-                              itemExtent: 44,
-                              onSelectedItemChanged: (index) {
-                                setState(() {
-                                  minutes = index;
-                                });
-                              },
-                              children: List<Widget>.generate(60, (index) {
-                                return Center(
-                                  child: Text(
-                                    '$index분',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                );
-                              }),
+                            flex: 1,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _buildUnitButton(
+                                  context,
+                                  '분',
+                                  isMinutes,
+                                  () => setState(() {
+                                    isMinutes = true;
+                                    selectedValue = selectedValue.clamp(0, 59);
+                                  }),
+                                ),
+                                SizedBox(height: 16),
+                                _buildUnitButton(
+                                  context,
+                                  '시간',
+                                  !isMinutes,
+                                  () => setState(() {
+                                    isMinutes = false;
+                                    selectedValue = selectedValue.clamp(0, 23);
+                                  }),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -242,7 +255,10 @@ class NotificationSettingBox extends StatelessWidget {
                   child: Text('취소'),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.of(context).pop(hours * 60 + minutes),
+                  onPressed: () {
+                    final minutes = isMinutes ? selectedValue : selectedValue * 60;
+                    Navigator.of(context).pop(minutes);
+                  },
                   child: Text('확인'),
                 ),
               ],
@@ -253,8 +269,32 @@ class NotificationSettingBox extends StatelessWidget {
     );
   }
 
-  Widget _buildRadioListTile(
+  Widget _buildUnitButton(
     BuildContext context,
+    String text,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blue : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? Colors.blue : Colors.grey,
+            width: 1,
+          ),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 16,
+            color: isSelected ? Colors.white : Colors.grey,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
     StateSetter setState,
     NotificationType type,
     String title,

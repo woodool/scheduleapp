@@ -49,6 +49,17 @@ class CategorySettingBox extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        tempCategory,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 24),

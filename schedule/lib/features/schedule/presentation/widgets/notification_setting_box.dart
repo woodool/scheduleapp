@@ -46,21 +46,23 @@ class NotificationSettingBox extends StatelessWidget {
           title: const Text(
             '알림 설정',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
+          contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           content: StatefulBuilder(
             builder: (context, setState) {
               return Container(
-                width: double.maxFinite,
+                width: 250,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     RadioListTile<NotificationType>(
-                      title: const Text('OFF'),
+                      title: const Text('OFF', style: TextStyle(fontSize: 14)),
                       value: NotificationType.none,
                       groupValue: tempType,
+                      contentPadding: EdgeInsets.zero,
                       onChanged: (value) {
                         setState(() {
                           tempType = value!;
@@ -68,9 +70,10 @@ class NotificationSettingBox extends StatelessWidget {
                       },
                     ),
                     RadioListTile<NotificationType>(
-                      title: const Text('ON'),
+                      title: const Text('ON', style: TextStyle(fontSize: 14)),
                       value: NotificationType.on,
                       groupValue: tempType,
+                      contentPadding: EdgeInsets.zero,
                       onChanged: (value) {
                         setState(() {
                           tempType = value!;
@@ -78,9 +81,10 @@ class NotificationSettingBox extends StatelessWidget {
                       },
                     ),
                     RadioListTile<NotificationType>(
-                      title: const Text('시간 설정'),
+                      title: const Text('시간 설정', style: TextStyle(fontSize: 14)),
                       value: NotificationType.custom,
                       groupValue: tempType,
+                      contentPadding: EdgeInsets.zero,
                       onChanged: (value) {
                         setState(() {
                           tempType = value!;
@@ -89,10 +93,10 @@ class NotificationSettingBox extends StatelessWidget {
                     ),
                     if (tempType == NotificationType.custom)
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 16.0, top: 8.0),
                         child: Row(
                           children: [
-                            const Text('알림 시간: '),
+                            const Text('알림 시간: ', style: TextStyle(fontSize: 14)),
                             TextButton(
                               onPressed: () async {
                                 final DateTime? date = await showDatePicker(
@@ -113,7 +117,15 @@ class NotificationSettingBox extends StatelessWidget {
                                   });
                                 }
                               },
-                              child: Text(DateFormat('MM/dd').format(tempDateTime)),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: Text(
+                                DateFormat('MM/dd').format(tempDateTime),
+                                style: const TextStyle(fontSize: 14),
+                              ),
                             ),
                             TextButton(
                               onPressed: () async {
@@ -136,7 +148,15 @@ class NotificationSettingBox extends StatelessWidget {
                                   });
                                 }
                               },
-                              child: Text(DateFormat('HH:mm').format(tempDateTime)),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: Text(
+                                DateFormat('HH:mm').format(tempDateTime),
+                                style: const TextStyle(fontSize: 14),
+                              ),
                             ),
                           ],
                         ),
@@ -146,12 +166,18 @@ class NotificationSettingBox extends StatelessWidget {
               );
             },
           ),
+          actionsPadding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('취소'),
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: const Text('취소', style: TextStyle(fontSize: 14)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -164,8 +190,11 @@ class NotificationSettingBox extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              child: const Text('확인'),
+              child: const Text('확인', style: TextStyle(fontSize: 14)),
             ),
           ],
         );

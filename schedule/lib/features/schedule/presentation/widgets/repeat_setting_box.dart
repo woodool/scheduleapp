@@ -24,6 +24,10 @@ class RepeatSettingBox extends StatelessWidget {
       }
     }
     
+    if (selectedWeekdays.length >= 5) {
+      return '매주 ${selectedWeekdays.length}일';
+    }
+    
     return '매주 ${selectedWeekdays.join(', ')}';
   }
 
@@ -118,6 +122,9 @@ class RepeatSettingBox extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
               ),
             ),
           ),

@@ -24,7 +24,7 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
   DateTime _endDate = DateTime(2023, 12, 15, 23);   // 12월 15일 오후 11시
   List<bool> _selectedDays = [false, false, false, false, false, false, false];
   NotificationType _notificationType = NotificationType.none;
-  DateTime? _customDateTime;
+  int? _customMinutes;
   String? _selectedCategory;
   Priority? _selectedPriority;
   CalendarDisplayType _calendarDisplayType = CalendarDisplayType.show; // 기본값은 달력 표시
@@ -91,15 +91,15 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
                           const SizedBox(width: 35),
                           NotificationSettingBox(
                             notificationType: _notificationType,
-                            customDateTime: _customDateTime,
+                            customMinutes: _customMinutes,
                             onTypeChanged: (type) {
                               setState(() {
                                 _notificationType = type;
                               });
                             },
-                            onCustomDateTimeChanged: (dateTime) {
+                            onCustomMinutesChanged: (minutes) {
                               setState(() {
-                                _customDateTime = dateTime;
+                                _customMinutes = minutes;
                               });
                             },
                           ),

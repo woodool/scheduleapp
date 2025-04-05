@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
-enum NotificationType {
-  none,
-  tenMinutes,
-  oneHour,
-  oneDay,
-  custom,
-}
+import '../../domain/models/notification_type.dart';
 
 class NotificationSettingBox extends StatelessWidget {
   final NotificationType notificationType;
@@ -17,7 +9,7 @@ class NotificationSettingBox extends StatelessWidget {
 
   const NotificationSettingBox({
     super.key,
-    this.notificationType = NotificationType.none,
+    required this.notificationType,
     this.customMinutes,
     this.onTypeChanged,
     this.onCustomMinutesChanged,
@@ -26,7 +18,7 @@ class NotificationSettingBox extends StatelessWidget {
   String _getNotificationText() {
     switch (notificationType) {
       case NotificationType.none:
-        return '일정 시작시간';
+        return '-';
       case NotificationType.tenMinutes:
         return '10분 전';
       case NotificationType.oneHour:
@@ -34,22 +26,14 @@ class NotificationSettingBox extends StatelessWidget {
       case NotificationType.oneDay:
         return '1일 전';
       case NotificationType.custom:
-        if (customMinutes != null) {
-          final hours = customMinutes! ~/ 60;
-          final minutes = customMinutes! % 60;
-          if (hours > 0) {
-            return '$hours시간 ${minutes > 0 ? '$minutes분' : ''} 전';
-          }
-          return '$minutes분 전';
-        }
-        return '직접 설정';
+        return customMinutes != null ? '$customMinutes분 전' : '-';
     }
   }
 
   Future<void> _showNotificationSelector(BuildContext context) async {
     NotificationType tempType = notificationType;
-    int tempMinutes = customMinutes ?? 5;
-    
+    int? tempMinutes = customMinutes;
+
     await showDialog(
       context: context,
       builder: (context) {
@@ -61,7 +45,6 @@ class NotificationSettingBox extends StatelessWidget {
                 width: 300,
                 height: 320,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 16),
@@ -73,6 +56,17 @@ class NotificationSettingBox extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        _getNotificationText(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: Column(
                         children: [
@@ -80,7 +74,7 @@ class NotificationSettingBox extends StatelessWidget {
                             context,
                             setState,
                             NotificationType.none,
-                            '일정 시작시간',
+                            '알림 없음',
                             tempType,
                             (value) => tempType = value,
                           ),
@@ -108,163 +102,34 @@ class NotificationSettingBox extends StatelessWidget {
                             tempType,
                             (value) => tempType = value,
                           ),
-                          InkWell(
-                            onTap: () async {
-                              final result = await _showCustomTimeSelector(context, tempMinutes);
-                              if (result != null) {
-                                setState(() {
-                                  tempType = NotificationType.custom;
-                                  tempMinutes = result;
-                                });
-                              }
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          _buildRadioListTile(
+                            context,
+                            setState,
+                            NotificationType.custom,
+                            '사용자 지정',
+                            tempType,
+                            (value) => tempType = value,
+                          ),
+                          if (tempType == NotificationType.custom)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
                               child: Row(
                                 children: [
-                                  Icon(
-                                    Icons.add_circle_outline,
-                                    size: 24,
-                                    color: Colors.blue,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Text(
-                                    '직접 설정',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.blue,
+                                  Expanded(
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                        hintText: '분',
+                                        suffixText: '분 전',
+                                      ),
+                                      onChanged: (value) {
+                                        tempMinutes = int.tryParse(value);
+                                      },
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('취소'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    onTypeChanged?.call(tempType);
-                    if (tempType == NotificationType.custom) {
-                      onCustomMinutesChanged?.call(tempMinutes);
-                    }
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('확인'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Future<int?> _showCustomTimeSelector(BuildContext context, int initialMinutes) async {
-    int selectedValue = initialMinutes;
-    bool isMinutes = true;
-    
-    return showDialog<int>(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              contentPadding: EdgeInsets.zero,
-              content: Container(
-                width: 300,
-                height: 320,
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Text(
-                        '직접 설정',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          // 왼쪽: 숫자 선택
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 24),
-                              child: CupertinoPicker(
-                                itemExtent: 44,
-                                onSelectedItemChanged: (index) {
-                                  setState(() {
-                                    selectedValue = index;
-                                  });
-                                },
-                                children: List<Widget>.generate(
-                                  isMinutes ? 60 : 24,
-                                  (index) => Center(
-                                    child: Text(
-                                      '$index',
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          // 오른쪽: 분/시간 선택
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 24),
-                              child: CupertinoPicker(
-                                itemExtent: 44,
-                                onSelectedItemChanged: (index) {
-                                  setState(() {
-                                    bool newIsMinutes = index == 0;
-                                    if (newIsMinutes != isMinutes) {
-                                      isMinutes = newIsMinutes;
-                                      selectedValue = selectedValue.clamp(0, isMinutes ? 59 : 23);
-                                    }
-                                  });
-                                },
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      '분',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: isMinutes ? Colors.blue : Colors.black,
-                                        fontWeight: isMinutes ? FontWeight.bold : FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      '시간',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: !isMinutes ? Colors.blue : Colors.black,
-                                        fontWeight: !isMinutes ? FontWeight.bold : FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -278,8 +143,11 @@ class NotificationSettingBox extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    final minutes = isMinutes ? selectedValue : selectedValue * 60;
-                    Navigator.of(context).pop(minutes);
+                    onTypeChanged?.call(tempType);
+                    if (tempType == NotificationType.custom) {
+                      onCustomMinutesChanged?.call(tempMinutes ?? 0);
+                    }
+                    Navigator.of(context).pop();
                   },
                   child: Text('확인'),
                 ),
@@ -291,57 +159,23 @@ class NotificationSettingBox extends StatelessWidget {
     );
   }
 
-  Widget _buildUnitButton(
-    BuildContext context,
-    String text,
-    bool isSelected,
-    VoidCallback onTap,
-  ) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isSelected ? Colors.blue : Colors.grey,
-            width: 1,
-          ),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            color: isSelected ? Colors.white : Colors.grey,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildRadioListTile(
     BuildContext context,
     StateSetter setState,
     NotificationType type,
     String title,
-    NotificationType selectedType,
-    Function(NotificationType) onChanged,
+    NotificationType value,
+    ValueChanged<NotificationType> onChanged,
   ) {
     return RadioListTile<NotificationType>(
-      title: Text(
-        title,
-        style: TextStyle(fontSize: 16),
-      ),
+      title: Text(title),
       value: type,
-      groupValue: selectedType,
-      onChanged: (value) {
+      groupValue: value,
+      onChanged: (newValue) {
         setState(() {
-          onChanged(value!);
+          onChanged(newValue!);
         });
       },
-      contentPadding: EdgeInsets.symmetric(horizontal: 16),
     );
   }
 
@@ -362,23 +196,23 @@ class NotificationSettingBox extends StatelessWidget {
         GestureDetector(
           onTap: () => _showNotificationSelector(context),
           child: Container(
-          width: 140,
-          height: 60,
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: Colors.black,
-            ),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Center(
-            child: Text(
-                _getNotificationText(),
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+            width: 140,
+            height: 60,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
                 color: Colors.black,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Center(
+              child: Text(
+                _getNotificationText(),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
                 ),
               ),
             ),

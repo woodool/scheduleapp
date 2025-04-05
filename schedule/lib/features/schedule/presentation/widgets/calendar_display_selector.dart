@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-
-enum CalendarDisplayType {
-  hide,
-  show,
-}
+import '../../domain/models/calendar_display_type.dart';
 
 class CalendarDisplaySelector extends StatelessWidget {
   final CalendarDisplayType selectedType;
@@ -15,45 +11,111 @@ class CalendarDisplaySelector extends StatelessWidget {
     this.onTypeSelected,
   });
 
+  String _getDisplayText() {
+    switch (selectedType) {
+      case CalendarDisplayType.show:
+        return '표시';
+      case CalendarDisplayType.hide:
+        return '숨김';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () => onTypeSelected?.call(CalendarDisplayType.hide),
-          child: Container(
-            width: 160,
-            height: 60,
-            child: Center(
-              child: Text(
-                '달력 미표시',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: selectedType == CalendarDisplayType.hide 
-                      ? Colors.black 
-                      : Color(0xFF767676),
-                ),
-              ),
-            ),
+        Text(
+          '달력 표시',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
           ),
         ),
-        const SizedBox(width: 15),
+        const SizedBox(height: 5),
         GestureDetector(
-          onTap: () => onTypeSelected?.call(CalendarDisplayType.show),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  contentPadding: EdgeInsets.zero,
+                  content: Container(
+                    width: 300,
+                    height: 320,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Text(
+                            '달력 표시 설정',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            _getDisplayText(),
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              RadioListTile<CalendarDisplayType>(
+                                title: Text('표시'),
+                                value: CalendarDisplayType.show,
+                                groupValue: selectedType,
+                                onChanged: (value) {
+                                  onTypeSelected?.call(value!);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              RadioListTile<CalendarDisplayType>(
+                                title: Text('숨김'),
+                                value: CalendarDisplayType.hide,
+                                groupValue: selectedType,
+                                onChanged: (value) {
+                                  onTypeSelected?.call(value!);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
           child: Container(
-            width: 160,
+            width: 335,
             height: 60,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: Colors.black,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
             child: Center(
               child: Text(
-                '달력 표시',
+                _getDisplayText(),
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: selectedType == CalendarDisplayType.show 
-                      ? Colors.black 
-                      : Color(0xFF767676),
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
                 ),
               ),
             ),

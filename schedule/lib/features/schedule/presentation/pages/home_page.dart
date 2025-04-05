@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'add_schedule_page.dart';
-import '../../../reminder/presentation/pages/add_reminder_page.dart';
+import 'add_reminder_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

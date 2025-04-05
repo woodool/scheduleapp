@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../schedule/presentation/widgets/title_input.dart';
-import '../../schedule/presentation/widgets/date_time_selector.dart';
-import '../../schedule/presentation/widgets/repeat_setting_box.dart';
-import '../../schedule/presentation/widgets/notification_setting_box.dart';
-import '../../schedule/presentation/widgets/action_buttons.dart';
+import '../widgets/title_input.dart';
+import '../widgets/date_time_selector.dart';
+import '../widgets/repeat_setting_box.dart';
+import '../widgets/notification_setting_box.dart';
+import '../widgets/action_buttons.dart';
 
 class EditReminderPage extends StatefulWidget {
   const EditReminderPage({super.key});

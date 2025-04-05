@@ -46,7 +46,7 @@ class DateTimeSelector extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 30),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: 98,
@@ -68,6 +68,7 @@ class DateTimeSelector extends StatelessWidget {
                       height: 22,
                       child: Text(
                         '오후 ${startDate.hour > 12 ? startDate.hour - 12 : startDate.hour}시',
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -98,7 +99,7 @@ class DateTimeSelector extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 30),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: 98,
@@ -120,6 +121,7 @@ class DateTimeSelector extends StatelessWidget {
                       height: 22,
                       child: Text(
                         '오후 ${endDate.hour > 12 ? endDate.hour - 12 : endDate.hour}시',
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,

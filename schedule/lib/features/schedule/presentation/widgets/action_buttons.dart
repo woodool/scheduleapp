@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class ActionButtons extends StatelessWidget {
   final VoidCallback? onCancelPressed;
   final VoidCallback? onSubmitPressed;
+  final String cancelText;
+  final String submitText;
 
   const ActionButtons({
     super.key,
     this.onCancelPressed,
     this.onSubmitPressed,
+    this.cancelText = '취소',
+    this.submitText = '등록',
   });
 
   @override
@@ -22,7 +26,7 @@ class ActionButtons extends StatelessWidget {
             height: 40,
             alignment: Alignment.center,
             child: Text(
-              '취소',
+              cancelText,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -41,7 +45,7 @@ class ActionButtons extends StatelessWidget {
             height: 40,
             alignment: Alignment.center,
             child: Text(
-              '등록',
+              submitText,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,

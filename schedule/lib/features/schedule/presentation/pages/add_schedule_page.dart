@@ -18,21 +18,21 @@ class AddSchedulePage extends StatefulWidget {
 }
 
 class _AddSchedulePageState extends State<AddSchedulePage> {
-  final _titleController = TextEditingController();
-  final _memoController = TextEditingController();
-  DateTime _startDate = DateTime(2023, 12, 12, 22); // 12월 12일 오후 10시
-  DateTime _endDate = DateTime(2023, 12, 15, 23);   // 12월 15일 오후 11시
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now();
   List<bool> _selectedDays = [false, false, false, false, false, false, false];
   NotificationType _notificationType = NotificationType.none;
   int? _customMinutes;
-  String? _selectedCategory;
+  String _selectedCategory = '-';  // 기본값 설정
   Priority? _selectedPriority;
   CalendarDisplayType _calendarDisplayType = CalendarDisplayType.show; // 기본값은 달력 표시
 
   @override
   void dispose() {
     _titleController.dispose();
-    _memoController.dispose();
+    _contentController.dispose();
     super.dispose();
   }
 
@@ -111,6 +111,11 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                         children: [
                           CategorySettingBox(
                             selectedCategory: _selectedCategory,
+                            onCategoryChanged: (category) {
+                              setState(() {
+                                _selectedCategory = category;
+                              });
+                            },
                           ),
                           const SizedBox(width: 35),
                           PrioritySettingBox(
@@ -120,7 +125,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                       ),
                       const SizedBox(height: 32),
                       MemoInput(
-                        controller: _memoController,
+                        controller: _contentController,
                         onChanged: (value) {
                           // TODO: 메모 변경 처리
                         },

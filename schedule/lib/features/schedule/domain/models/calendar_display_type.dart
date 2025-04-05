@@ -1,0 +1,4 @@
+enum CalendarDisplayType {
+  show,
+  hide
+} 

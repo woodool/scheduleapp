@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'priority.dart';
+import 'notification_type.dart';
+import 'calendar_display_type.dart';
 
 class Schedule {
   final String id;

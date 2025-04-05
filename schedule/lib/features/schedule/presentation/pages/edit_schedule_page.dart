@@ -23,7 +23,8 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
   DateTime _startDate = DateTime(2023, 12, 12, 22); // 12월 12일 오후 10시
   DateTime _endDate = DateTime(2023, 12, 15, 23);   // 12월 15일 오후 11시
   List<bool> _selectedDays = [false, false, false, false, false, false, false];
-  String? _selectedNotification;
+  NotificationType _notificationType = NotificationType.none;
+  int _customNotificationValue = 1;
   String? _selectedCategory;
   Priority? _selectedPriority;
   CalendarDisplayType _calendarDisplayType = CalendarDisplayType.show; // 기본값은 달력 표시
@@ -89,7 +90,18 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
                           ),
                           const SizedBox(width: 35),
                           NotificationSettingBox(
-                            selectedNotification: _selectedNotification,
+                            notificationType: _notificationType,
+                            customValue: _customNotificationValue,
+                            onTypeChanged: (type) {
+                              setState(() {
+                                _notificationType = type;
+                              });
+                            },
+                            onCustomValueChanged: (value) {
+                              setState(() {
+                                _customNotificationValue = value;
+                              });
+                            },
                           ),
                         ],
                       ),

@@ -362,23 +362,23 @@ class NotificationSettingBox extends StatelessWidget {
         GestureDetector(
           onTap: () => _showNotificationSelector(context),
           child: Container(
-            width: 140,
-            height: 60,
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: Colors.black,
-              ),
-              borderRadius: BorderRadius.circular(15),
+          width: 140,
+          height: 60,
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: Colors.black,
             ),
-            child: Center(
-              child: Text(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Center(
+            child: Text(
                 _getNotificationText(),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
                 ),
               ),
             ),

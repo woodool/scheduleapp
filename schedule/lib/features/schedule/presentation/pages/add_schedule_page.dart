@@ -9,8 +9,6 @@ import '../widgets/memo_input.dart';
 import '../widgets/calendar_display_selector.dart';
 import '../widgets/action_buttons.dart';
 import '../../domain/models/priority.dart';
-import '../../domain/models/schedule.dart';
-import '../../data/repositories/schedule_repository.dart';
 
 class AddSchedulePage extends StatefulWidget {
   const AddSchedulePage({super.key});
@@ -31,43 +29,11 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   Priority? _selectedPriority;
   CalendarDisplayType _calendarDisplayType = CalendarDisplayType.show; // 기본값은 달력 표시
 
-  final _scheduleRepository = ScheduleRepository();
-
   @override
   void dispose() {
     _titleController.dispose();
     _contentController.dispose();
     super.dispose();
-  }
-
-  void _handleCancel() {
-    Navigator.of(context).pop();
-  }
-
-  void _handleSubmit() {
-    if (_titleController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('제목을 입력해주세요')),
-      );
-      return;
-    }
-
-    final schedule = Schedule(
-      id: _scheduleRepository.generateId(),
-      title: _titleController.text,
-      memo: _contentController.text,
-      startDate: _startDate,
-      endDate: _endDate,
-      repeatDays: _selectedDays,
-      notificationType: _notificationType,
-      customMinutes: _customMinutes,
-      category: _selectedCategory,
-      priority: _selectedPriority,
-      calendarDisplayType: _calendarDisplayType,
-    );
-
-    _scheduleRepository.addSchedule(schedule);
-    Navigator.of(context).pop();
   }
 
   @override
@@ -187,8 +153,12 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
               color: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ActionButtons(
-                onCancelPressed: _handleCancel,
-                onSubmitPressed: _handleSubmit,
+                onCancelPressed: () {
+                  // TODO: 취소 처리
+                },
+                onSubmitPressed: () {
+                  // TODO: 등록 처리
+                },
               ),
             ),
           ],
@@ -197,3 +167,4 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
     );
   }
 } 
+

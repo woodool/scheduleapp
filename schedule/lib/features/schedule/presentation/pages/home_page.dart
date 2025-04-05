@@ -67,11 +67,15 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           FloatingActionButton(
+            backgroundColor: const Color(0xFF2D3F7B),
             onPressed: _toggleMenu,
             child: AnimatedRotation(
               duration: const Duration(milliseconds: 300),
               turns: _isMenuOpen ? 0.125 : 0,
-              child: const Icon(Icons.add),
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -86,41 +90,56 @@ class _HomePageState extends State<HomePage> {
   }) {
     return Material(
       color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          height: 106,
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
+      child: Container(
+        width: 200,
+        height: 106,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF5F6FA),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        imagePath,
+                        width: 24,
+                        height: 24,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Image.asset(
-                imagePath,
-                width: 24,
-                height: 24,
-              ),
-            ],
+            ),
           ),
         ),
       ),

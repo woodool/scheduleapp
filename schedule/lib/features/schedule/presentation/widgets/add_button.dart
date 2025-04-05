@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../pages/add_schedule_page.dart';
-import '../../reminder/presentation/pages/add_reminder_page.dart';
+import '../../../reminder/presentation/pages/add_reminder_page.dart';
 
 class AddButton extends StatefulWidget {
   const AddButton({super.key});

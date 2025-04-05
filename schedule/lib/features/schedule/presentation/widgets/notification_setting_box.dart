@@ -59,6 +59,7 @@ class NotificationSettingBox extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               content: Container(
                 width: 300,
+                height: 300,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -72,68 +73,74 @@ class NotificationSettingBox extends StatelessWidget {
                         ),
                       ),
                     ),
-                    _buildRadioListTile(
-                      context,
-                      setState,
-                      NotificationType.none,
-                      '일정 시작시간',
-                      tempType,
-                      (value) => tempType = value,
-                    ),
-                    _buildRadioListTile(
-                      context,
-                      setState,
-                      NotificationType.tenMinutes,
-                      '10분 전',
-                      tempType,
-                      (value) => tempType = value,
-                    ),
-                    _buildRadioListTile(
-                      context,
-                      setState,
-                      NotificationType.oneHour,
-                      '1시간 전',
-                      tempType,
-                      (value) => tempType = value,
-                    ),
-                    _buildRadioListTile(
-                      context,
-                      setState,
-                      NotificationType.oneDay,
-                      '1일 전',
-                      tempType,
-                      (value) => tempType = value,
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        final result = await _showCustomTimeSelector(context, tempMinutes);
-                        if (result != null) {
-                          setState(() {
-                            tempType = NotificationType.custom;
-                            tempMinutes = result;
-                          });
-                        }
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.add_circle_outline,
-                              size: 24,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              '직접 설정',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.blue,
+                    Expanded(
+                      child: Column(
+                        children: [
+                          _buildRadioListTile(
+                            context,
+                            setState,
+                            NotificationType.none,
+                            '일정 시작시간',
+                            tempType,
+                            (value) => tempType = value,
+                          ),
+                          _buildRadioListTile(
+                            context,
+                            setState,
+                            NotificationType.tenMinutes,
+                            '10분 전',
+                            tempType,
+                            (value) => tempType = value,
+                          ),
+                          _buildRadioListTile(
+                            context,
+                            setState,
+                            NotificationType.oneHour,
+                            '1시간 전',
+                            tempType,
+                            (value) => tempType = value,
+                          ),
+                          _buildRadioListTile(
+                            context,
+                            setState,
+                            NotificationType.oneDay,
+                            '1일 전',
+                            tempType,
+                            (value) => tempType = value,
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              final result = await _showCustomTimeSelector(context, tempMinutes);
+                              if (result != null) {
+                                setState(() {
+                                  tempType = NotificationType.custom;
+                                  tempMinutes = result;
+                                });
+                              }
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.add_circle_outline,
+                                    size: 24,
+                                    color: Colors.blue,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    '직접 설정',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -176,16 +183,16 @@ class NotificationSettingBox extends StatelessWidget {
             return AlertDialog(
               contentPadding: EdgeInsets.zero,
               content: Container(
+                width: 300,
                 height: 300,
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(16),
-                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(vertical: 16),
                       child: Text(
-                        isMinutes ? '$selectedValue분' : '$selectedValue시간',
+                        '직접 설정',
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -195,9 +202,9 @@ class NotificationSettingBox extends StatelessWidget {
                         children: [
                           // 왼쪽: 숫자 선택
                           Expanded(
-                            flex: 2,
+                            flex: 3,
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              padding: EdgeInsets.symmetric(horizontal: 24),
                               child: CupertinoPicker(
                                 itemExtent: 44,
                                 onSelectedItemChanged: (index) {
@@ -218,42 +225,44 @@ class NotificationSettingBox extends StatelessWidget {
                             ),
                           ),
                           // 오른쪽: 분/시간 선택
-                          Container(
-                            width: 80,
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: CupertinoPicker(
-                              itemExtent: 44,
-                              onSelectedItemChanged: (index) {
-                                setState(() {
-                                  bool newIsMinutes = index == 0;
-                                  if (newIsMinutes != isMinutes) {
-                                    isMinutes = newIsMinutes;
-                                    selectedValue = selectedValue.clamp(0, isMinutes ? 59 : 23);
-                                  }
-                                });
-                              },
-                              children: [
-                                Center(
-                                  child: Text(
-                                    '분',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: isMinutes ? Colors.blue : Colors.black,
-                                      fontWeight: isMinutes ? FontWeight.bold : FontWeight.normal,
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 24),
+                              child: CupertinoPicker(
+                                itemExtent: 44,
+                                onSelectedItemChanged: (index) {
+                                  setState(() {
+                                    bool newIsMinutes = index == 0;
+                                    if (newIsMinutes != isMinutes) {
+                                      isMinutes = newIsMinutes;
+                                      selectedValue = selectedValue.clamp(0, isMinutes ? 59 : 23);
+                                    }
+                                  });
+                                },
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      '분',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: isMinutes ? Colors.blue : Colors.black,
+                                        fontWeight: isMinutes ? FontWeight.bold : FontWeight.normal,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    '시간',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: !isMinutes ? Colors.blue : Colors.black,
-                                      fontWeight: !isMinutes ? FontWeight.bold : FontWeight.normal,
+                                  Center(
+                                    child: Text(
+                                      '시간',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: !isMinutes ? Colors.blue : Colors.black,
+                                        fontWeight: !isMinutes ? FontWeight.bold : FontWeight.normal,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ],

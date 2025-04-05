@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 
 enum NotificationType {
   none,
@@ -166,8 +165,8 @@ class NotificationSettingBox extends StatelessWidget {
   }
 
   Future<int?> _showCustomTimeSelector(BuildContext context, int initialMinutes) async {
-    int selectedValue = 0;
-    bool isMinutes = true; // true면 분, false면 시간
+    int selectedValue = initialMinutes;
+    bool isMinutes = true;
     
     return showDialog<int>(
       context: context,
@@ -197,27 +196,31 @@ class NotificationSettingBox extends StatelessWidget {
                           // 왼쪽: 숫자 선택
                           Expanded(
                             flex: 2,
-                            child: CupertinoPicker(
-                              itemExtent: 44,
-                              onSelectedItemChanged: (index) {
-                                setState(() {
-                                  selectedValue = index;
-                                });
-                              },
-                              children: List<Widget>.generate(
-                                isMinutes ? 60 : 24,
-                                (index) => Center(
-                                  child: Text(
-                                    '$index',
-                                    style: TextStyle(fontSize: 20),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: CupertinoPicker(
+                                itemExtent: 44,
+                                onSelectedItemChanged: (index) {
+                                  setState(() {
+                                    selectedValue = index;
+                                  });
+                                },
+                                children: List<Widget>.generate(
+                                  isMinutes ? 60 : 24,
+                                  (index) => Center(
+                                    child: Text(
+                                      '$index',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
                           // 오른쪽: 분/시간 선택
-                          Expanded(
-                            flex: 1,
+                          Container(
+                            width: 80,
+                            padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -226,8 +229,10 @@ class NotificationSettingBox extends StatelessWidget {
                                   '분',
                                   isMinutes,
                                   () => setState(() {
-                                    isMinutes = true;
-                                    selectedValue = selectedValue.clamp(0, 59);
+                                    if (!isMinutes) {
+                                      isMinutes = true;
+                                      selectedValue = selectedValue.clamp(0, 59);
+                                    }
                                   }),
                                 ),
                                 SizedBox(height: 16),
@@ -236,8 +241,10 @@ class NotificationSettingBox extends StatelessWidget {
                                   '시간',
                                   !isMinutes,
                                   () => setState(() {
-                                    isMinutes = false;
-                                    selectedValue = selectedValue.clamp(0, 23);
+                                    if (isMinutes) {
+                                      isMinutes = false;
+                                      selectedValue = selectedValue.clamp(0, 23);
+                                    }
                                   }),
                                 ),
                               ],
@@ -295,6 +302,12 @@ class NotificationSettingBox extends StatelessWidget {
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildRadioListTile(
+    BuildContext context,
     StateSetter setState,
     NotificationType type,
     String title,

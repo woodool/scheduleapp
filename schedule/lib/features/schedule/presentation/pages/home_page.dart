@@ -130,11 +130,13 @@ class _HomePageState extends State<HomePage> {
                       color: const Color(0xFFF5F6FA),
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Image.asset(
                         imagePath,
-                        width: 48,
-                        height: 48,
+                        width: 32,
+                        height: 32,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),

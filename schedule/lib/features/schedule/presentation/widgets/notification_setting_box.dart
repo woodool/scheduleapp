@@ -58,42 +58,46 @@ class NotificationSettingBox extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    RadioListTile<NotificationType>(
-                      title: const Text('OFF', style: TextStyle(fontSize: 14)),
-                      value: NotificationType.none,
-                      groupValue: tempType,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      onChanged: (value) {
-                        setState(() {
-                          tempType = value!;
-                        });
-                      },
+                    _buildOptionTile(
+                      context,
+                      setState,
+                      NotificationType.none,
+                      'OFF',
+                      '알림을 받지 않습니다',
+                      Icons.notifications_off,
+                      tempType,
+                      (value) => tempType = value,
                     ),
-                    RadioListTile<NotificationType>(
-                      title: const Text('ON', style: TextStyle(fontSize: 14)),
-                      value: NotificationType.on,
-                      groupValue: tempType,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      onChanged: (value) {
-                        setState(() {
-                          tempType = value!;
-                        });
-                      },
+                    const SizedBox(height: 8),
+                    _buildOptionTile(
+                      context,
+                      setState,
+                      NotificationType.on,
+                      'ON',
+                      '일정 시간에 알림을 받습니다',
+                      Icons.notifications_active,
+                      tempType,
+                      (value) => tempType = value,
                     ),
-                    RadioListTile<NotificationType>(
-                      title: const Text('시간 설정', style: TextStyle(fontSize: 14)),
-                      value: NotificationType.custom,
-                      groupValue: tempType,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                      onChanged: (value) {
-                        setState(() {
-                          tempType = value!;
-                        });
-                      },
+                    const SizedBox(height: 8),
+                    _buildOptionTile(
+                      context,
+                      setState,
+                      NotificationType.custom,
+                      '시간 설정',
+                      '원하는 시간에 알림을 받습니다',
+                      Icons.access_time,
+                      tempType,
+                      (value) => tempType = value,
                     ),
                     if (tempType == NotificationType.custom)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0, top: 12.0, bottom: 8.0),
+                      Container(
+                        margin: const EdgeInsets.only(top: 16, left: 16),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         child: Row(
                           children: [
                             const Text('알림 시간: ', style: TextStyle(fontSize: 14)),
@@ -197,6 +201,77 @@ class NotificationSettingBox extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildOptionTile(
+    BuildContext context,
+    StateSetter setState,
+    NotificationType type,
+    String title,
+    String subtitle,
+    IconData icon,
+    NotificationType selectedType,
+    Function(NotificationType) onChanged,
+  ) {
+    final isSelected = selectedType == type;
+    
+    return InkWell(
+      onTap: () {
+        setState(() {
+          onChanged(type);
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blue.withOpacity(0.1) : Colors.transparent,
+          border: Border.all(
+            color: isSelected ? Colors.blue : Colors.grey.shade300,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? Colors.blue : Colors.grey,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: isSelected ? Colors.blue : Colors.black,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (isSelected)
+              const Icon(
+                Icons.check_circle,
+                color: Colors.blue,
+                size: 20,
+              ),
+          ],
+        ),
+      ),
     );
   }
 

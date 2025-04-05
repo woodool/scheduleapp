@@ -173,9 +173,8 @@ class NotificationSettingBox extends StatelessWidget {
                 Navigator.of(context).pop();
               },
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                minimumSize: const Size(60, 36),
               ),
               child: const Text('취소', style: TextStyle(fontSize: 14)),
             ),
@@ -190,9 +189,8 @@ class NotificationSettingBox extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                minimumSize: const Size(60, 36),
               ),
               child: const Text('확인', style: TextStyle(fontSize: 14)),
             ),

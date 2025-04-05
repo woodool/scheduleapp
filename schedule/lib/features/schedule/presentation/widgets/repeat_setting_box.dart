@@ -12,12 +12,13 @@ class RepeatSettingBox extends StatelessWidget {
 
   static const List<String> weekdays = ['월', '화', '수', '목', '금', '토', '일'];
 
-  String _getSelectedDaysText() {
-    if (!selectedDays.contains(true)) return '-';
+  String _getSelectedDaysText([List<bool>? days]) {
+    final targetDays = days ?? selectedDays;
+    if (!targetDays.contains(true)) return '-';
     
     final selectedWeekdays = <String>[];
-    for (int i = 0; i < selectedDays.length; i++) {
-      if (selectedDays[i]) {
+    for (int i = 0; i < targetDays.length; i++) {
+      if (targetDays[i]) {
         selectedWeekdays.add(weekdays[i]);
       }
     }
@@ -57,7 +58,7 @@ class RepeatSettingBox extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 8),
                       child: Text(
-                        _getSelectedDaysText(),
+                        _getSelectedDaysText(tempSelectedDays),
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,

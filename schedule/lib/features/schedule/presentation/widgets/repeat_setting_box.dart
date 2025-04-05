@@ -6,18 +6,16 @@ class RepeatSettingBox extends StatelessWidget {
 
   const RepeatSettingBox({
     super.key,
-    this.selectedDays = const [false, false, false, false, false, false, false],
+    required this.selectedDays,
     this.onDaysChanged,
   });
 
-  String _getSelectedDaysText() {
-    if (selectedDays.every((day) => !day)) {
-      return '-';
-    }
+  static const List<String> weekdays = ['월', '화', '수', '목', '금', '토', '일'];
 
-    const weekdays = ['월', '화', '수', '목', '금', '토', '일'];
-    final selectedWeekdays = <String>[];
+  String _getSelectedDaysText() {
+    if (!selectedDays.contains(true)) return '-';
     
+    final selectedWeekdays = <String>[];
     for (int i = 0; i < selectedDays.length; i++) {
       if (selectedDays[i]) {
         selectedWeekdays.add(weekdays[i]);
@@ -37,52 +35,91 @@ class RepeatSettingBox extends StatelessWidget {
     await showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('반복 요일 선택'),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildDayCheckbox(context, setState, 0, '월', tempSelectedDays),
-                  _buildDayCheckbox(context, setState, 1, '화', tempSelectedDays),
-                  _buildDayCheckbox(context, setState, 2, '수', tempSelectedDays),
-                  _buildDayCheckbox(context, setState, 3, '목', tempSelectedDays),
-                  _buildDayCheckbox(context, setState, 4, '금', tempSelectedDays),
-                  _buildDayCheckbox(context, setState, 5, '토', tempSelectedDays),
-                  _buildDayCheckbox(context, setState, 6, '일', tempSelectedDays),
-                ],
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('취소'),
-            ),
-            TextButton(
-              onPressed: () {
-                onDaysChanged?.call(tempSelectedDays);
-                Navigator.of(context).pop();
-              },
-              child: const Text('확인'),
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                width: 300,
+                height: 320,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        '반복 설정',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        _getSelectedDaysText(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 24),
+                        child: ListView.builder(
+                          itemCount: weekdays.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                              child: CheckboxListTile(
+                                title: Text(
+                                  '${weekdays[index]}요일',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                value: tempSelectedDays[index],
+                                onChanged: (bool? value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      tempSelectedDays[index] = value;
+                                    });
+                                  }
+                                },
+                                activeColor: Colors.blue,
+                                contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('취소'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    onDaysChanged?.call(tempSelectedDays);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('확인'),
+                ),
+              ],
+            );
+          },
         );
-      },
-    );
-  }
-
-  Widget _buildDayCheckbox(BuildContext context, StateSetter setState, int index, String day, List<bool> tempSelectedDays) {
-    return CheckboxListTile(
-      title: Text(day),
-      value: tempSelectedDays[index],
-      onChanged: (value) {
-        setState(() {
-          tempSelectedDays[index] = value ?? false;
-        });
       },
     );
   }
@@ -122,9 +159,6 @@ class RepeatSettingBox extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
               ),
             ),
           ),

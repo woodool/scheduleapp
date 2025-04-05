@@ -3,20 +3,55 @@ import 'package:flutter/material.dart';
 class DateTimeSelector extends StatelessWidget {
   final DateTime startDate;
   final DateTime endDate;
-  final VoidCallback? onStartDateTap;
-  final VoidCallback? onEndDateTap;
+  final ValueChanged<DateTime>? onStartDateChanged;
+  final ValueChanged<DateTime>? onEndDateChanged;
 
   const DateTimeSelector({
     super.key,
     required this.startDate,
     required this.endDate,
-    this.onStartDateTap,
-    this.onEndDateTap,
+    this.onStartDateChanged,
+    this.onEndDateChanged,
   });
 
   String _getWeekday(DateTime date) {
     const weekdays = ['월', '화', '수', '목', '금', '토', '일'];
     return weekdays[date.weekday - 1];
+  }
+
+  Future<void> _selectDate(BuildContext context, bool isStartDate) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: isStartDate ? startDate : endDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay(
+          hour: isStartDate ? startDate.hour : endDate.hour,
+          minute: isStartDate ? startDate.minute : endDate.minute,
+        ),
+      );
+
+      if (pickedTime != null) {
+        final DateTime selectedDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        if (isStartDate) {
+          onStartDateChanged?.call(selectedDateTime);
+        } else {
+          onEndDateChanged?.call(selectedDateTime);
+        }
+      }
+    }
   }
 
   @override
@@ -39,7 +74,7 @@ class DateTimeSelector extends StatelessWidget {
         Row(
           children: [
             GestureDetector(
-              onTap: onStartDateTap,
+              onTap: () => _selectDate(context, true),
               child: Container(
                 width: 150,
                 height: 104,
@@ -92,7 +127,7 @@ class DateTimeSelector extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: onEndDateTap,
+              onTap: () => _selectDate(context, false),
               child: Container(
                 width: 150,
                 height: 104,

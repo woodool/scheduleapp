@@ -20,9 +20,9 @@ class AddSchedulePage extends StatefulWidget {
 class _AddSchedulePageState extends State<AddSchedulePage> {
   final _titleController = TextEditingController();
   final _memoController = TextEditingController();
-  final _startDate = DateTime(2023, 12, 12, 22); // 12월 12일 오후 10시
-  final _endDate = DateTime(2023, 12, 15, 23);   // 12월 15일 오후 11시
-  String? _selectedRepeat;
+  DateTime _startDate = DateTime(2023, 12, 12, 22); // 12월 12일 오후 10시
+  DateTime _endDate = DateTime(2023, 12, 15, 23);   // 12월 15일 오후 11시
+  List<bool> _selectedDays = [false, false, false, false, false, false, false];
   String? _selectedNotification;
   String? _selectedCategory;
   Priority? _selectedPriority;
@@ -62,11 +62,15 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                           DateTimeSelector(
                             startDate: _startDate,
                             endDate: _endDate,
-                            onStartDateTap: () {
-                              // TODO: 시작 날짜/시간 선택
+                            onStartDateChanged: (date) {
+                              setState(() {
+                                _startDate = date;
+                              });
                             },
-                            onEndDateTap: () {
-                              // TODO: 종료 날짜/시간 선택
+                            onEndDateChanged: (date) {
+                              setState(() {
+                                _endDate = date;
+                              });
                             },
                           ),
                         ],
@@ -76,7 +80,12 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           RepeatSettingBox(
-                            selectedRepeat: _selectedRepeat,
+                            selectedDays: _selectedDays,
+                            onDaysChanged: (days) {
+                              setState(() {
+                                _selectedDays = days;
+                              });
+                            },
                           ),
                           const SizedBox(width: 35),
                           NotificationSettingBox(

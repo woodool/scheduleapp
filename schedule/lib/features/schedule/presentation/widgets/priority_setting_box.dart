@@ -1,41 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import '../../domain/models/priority.dart';
 
 class PrioritySettingBox extends StatelessWidget {
-  final Priority? selectedPriority;
-  final ValueChanged<Priority>? onPriorityChanged;
+  final int priority;
+  final ValueChanged<int>? onPriorityChanged;
 
   const PrioritySettingBox({
     super.key,
-    this.selectedPriority,
+    this.priority = 1,
     this.onPriorityChanged,
   });
 
   String _getPriorityText() {
-    if (selectedPriority == null) return '-';
-    return selectedPriority!.name;
+    switch (priority) {
+      case 1:
+        return '낮음';
+      case 2:
+        return '보통';
+      case 3:
+        return '높음';
+      default:
+        return '-';
+    }
   }
 
   Color _getPriorityColor() {
-    if (selectedPriority == null) return Colors.grey;
-    return selectedPriority!.color;
-  }
-
-  Widget _buildPriorityBox(Color color, {double width = 84, double height = 22}) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10),
-      ),
-    );
+    switch (priority) {
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
   }
 
   Future<void> _showPrioritySelector(BuildContext context) async {
-    Priority tempPriority = selectedPriority ?? Priority.values.last;
-    
+    int tempPriority = priority;
+
     await showDialog(
       context: context,
       builder: (context) {
@@ -60,24 +63,46 @@ class PrioritySettingBox extends StatelessWidget {
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 8),
-                      child: _buildPriorityBox(tempPriority.color, width: 120, height: 30),
+                      child: Text(
+                        _getPriorityText(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: _getPriorityColor(),
+                        ),
+                      ),
                     ),
                     Expanded(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 24),
-                        child: CupertinoPicker(
-                          itemExtent: 44,
-                          onSelectedItemChanged: (index) {
-                            setState(() {
-                              tempPriority = Priority.values[index];
-                            });
-                          },
-                          children: Priority.values.map((priority) {
-                            return Center(
-                              child: _buildPriorityBox(priority.color, width: 100, height: 26),
-                            );
-                          }).toList(),
-                        ),
+                      child: Column(
+                        children: [
+                          _buildPriorityOption(
+                            context,
+                            setState,
+                            1,
+                            '낮음',
+                            Colors.green,
+                            tempPriority,
+                            (value) => tempPriority = value,
+                          ),
+                          _buildPriorityOption(
+                            context,
+                            setState,
+                            2,
+                            '보통',
+                            Colors.orange,
+                            tempPriority,
+                            (value) => tempPriority = value,
+                          ),
+                          _buildPriorityOption(
+                            context,
+                            setState,
+                            3,
+                            '높음',
+                            Colors.red,
+                            tempPriority,
+                            (value) => tempPriority = value,
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -99,6 +124,33 @@ class PrioritySettingBox extends StatelessWidget {
             );
           },
         );
+      },
+    );
+  }
+
+  Widget _buildPriorityOption(
+    BuildContext context,
+    StateSetter setState,
+    int value,
+    String title,
+    Color color,
+    int selectedValue,
+    ValueChanged<int> onChanged,
+  ) {
+    return RadioListTile<int>(
+      title: Text(
+        title,
+        style: TextStyle(
+          color: color,
+          fontWeight: selectedValue == value ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      value: value,
+      groupValue: selectedValue,
+      onChanged: (value) {
+        setState(() {
+          onChanged(value!);
+        });
       },
     );
   }
@@ -131,7 +183,14 @@ class PrioritySettingBox extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Center(
-              child: _buildPriorityBox(_getPriorityColor()),
+              child: Text(
+                _getPriorityText(),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: _getPriorityColor(),
+                ),
+              ),
             ),
           ),
         ),

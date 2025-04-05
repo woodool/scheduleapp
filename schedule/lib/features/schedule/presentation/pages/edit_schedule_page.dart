@@ -9,25 +9,46 @@ import '../widgets/memo_input.dart';
 import '../widgets/calendar_display_selector.dart';
 import '../widgets/action_buttons.dart';
 import '../../domain/models/priority.dart';
+import '../../domain/models/schedule.dart';
 
 class EditSchedulePage extends StatefulWidget {
-  const EditSchedulePage({super.key});
+  final Schedule schedule;
+
+  const EditSchedulePage({
+    super.key,
+    required this.schedule,
+  });
 
   @override
   State<EditSchedulePage> createState() => _EditSchedulePageState();
 }
 
 class _EditSchedulePageState extends State<EditSchedulePage> {
-  final _titleController = TextEditingController();
-  final _memoController = TextEditingController();
-  DateTime _startDate = DateTime(2023, 12, 12, 22); // 12월 12일 오후 10시
-  DateTime _endDate = DateTime(2023, 12, 15, 23);   // 12월 15일 오후 11시
-  List<bool> _selectedDays = [false, false, false, false, false, false, false];
-  NotificationType _notificationType = NotificationType.none;
-  int? _customMinutes;
-  String? _selectedCategory;
-  Priority? _selectedPriority;
-  CalendarDisplayType _calendarDisplayType = CalendarDisplayType.show; // 기본값은 달력 표시
+  late final TextEditingController _titleController;
+  late final TextEditingController _memoController;
+  late DateTime _startDate;
+  late DateTime _endDate;
+  late List<bool> _selectedDays;
+  late NotificationType _notificationType;
+  late DateTime? _customDateTime;
+  late int _priority;
+  late String _category;
+  late CalendarDisplayType _calendarDisplayType;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.schedule.title);
+    _memoController = TextEditingController(text: widget.schedule.description);
+    _startDate = widget.schedule.startDate;
+    _endDate = widget.schedule.endDate;
+    _selectedDays = List.from(widget.schedule.repeatDays);
+    _notificationType = widget.schedule.notificationType;
+    _customDateTime = widget.schedule.customDateTime;
+    _priority = widget.schedule.priority;
+    _category = widget.schedule.category;
+    _calendarDisplayType = CalendarDisplayType.show;
+  }
 
   @override
   void dispose() {
@@ -36,10 +57,51 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
     super.dispose();
   }
 
+  void _handleCancel() {
+    Navigator.of(context).pop();
+  }
+
+  void _handleEdit() {
+    if (_titleController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('제목을 입력해주세요')),
+      );
+      return;
+    }
+
+    final schedule = Schedule(
+      id: widget.schedule.id,
+      title: _titleController.text,
+      description: _memoController.text,
+      startDate: _startDate,
+      endDate: _endDate,
+      isAllDay: widget.schedule.isAllDay,
+      repeatDays: _selectedDays,
+      notificationType: _notificationType,
+      customDateTime: _customDateTime,
+      priority: _priority,
+      category: _category,
+    );
+
+    Navigator.of(context).pop(schedule);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('일정 수정'),
+        actions: [
+          TextButton(
+            onPressed: _handleCancel,
+            child: const Text('취소'),
+          ),
+          TextButton(
+            onPressed: _handleEdit,
+            child: const Text('수정'),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -57,66 +119,61 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
                         },
                       ),
                       const SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          DateTimeSelector(
-                            startDate: _startDate,
-                            endDate: _endDate,
-                            onStartDateChanged: (date) {
-                              setState(() {
-                                _startDate = date;
-                              });
-                            },
-                            onEndDateChanged: (date) {
-                              setState(() {
-                                _endDate = date;
-                              });
-                            },
-                          ),
-                        ],
+                      DateTimeSelector(
+                        startDate: _startDate,
+                        endDate: _endDate,
+                        onStartDateChanged: (date) {
+                          setState(() {
+                            _startDate = date;
+                          });
+                        },
+                        onEndDateChanged: (date) {
+                          setState(() {
+                            _endDate = date;
+                          });
+                        },
                       ),
                       const SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RepeatSettingBox(
-                            selectedDays: _selectedDays,
-                            onDaysChanged: (days) {
-                              setState(() {
-                                _selectedDays = days;
-                              });
-                            },
-                          ),
-                          const SizedBox(width: 35),
-                          NotificationSettingBox(
-                            notificationType: _notificationType,
-                            customMinutes: _customMinutes,
-                            onTypeChanged: (type) {
-                              setState(() {
-                                _notificationType = type;
-                              });
-                            },
-                            onCustomMinutesChanged: (minutes) {
-                              setState(() {
-                                _customMinutes = minutes;
-                              });
-                            },
-                          ),
-                        ],
+                      RepeatSettingBox(
+                        selectedDays: _selectedDays,
+                        onDaysChanged: (days) {
+                          setState(() {
+                            _selectedDays = days;
+                          });
+                        },
                       ),
                       const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CategorySettingBox(
-                            selectedCategory: _selectedCategory,
-                          ),
-                          const SizedBox(width: 35),
-                          PrioritySettingBox(
-                            selectedPriority: _selectedPriority,
-                          ),
-                        ],
+                      NotificationSettingBox(
+                        notificationType: _notificationType,
+                        customDateTime: _customDateTime,
+                        onTypeChanged: (type) {
+                          setState(() {
+                            _notificationType = type;
+                          });
+                        },
+                        onCustomDateTimeChanged: (dateTime) {
+                          setState(() {
+                            _customDateTime = dateTime;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      PrioritySettingBox(
+                        priority: _priority,
+                        onPriorityChanged: (priority) {
+                          setState(() {
+                            _priority = priority;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      CategorySettingBox(
+                        category: _category,
+                        onCategoryChanged: (category) {
+                          setState(() {
+                            _category = category;
+                          });
+                        },
                       ),
                       const SizedBox(height: 32),
                       MemoInput(
@@ -143,12 +200,8 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
               color: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ActionButtons(
-                onCancelPressed: () {
-                  // TODO: 취소 처리
-                },
-                onSubmitPressed: () {
-                  // TODO: 수정 처리
-                },
+                onCancelPressed: _handleCancel,
+                onSubmitPressed: _handleEdit,
                 cancelText: '취소',
                 submitText: '수정',
               ),

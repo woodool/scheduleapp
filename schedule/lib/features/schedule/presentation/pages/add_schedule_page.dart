@@ -9,7 +9,7 @@ import '../widgets/memo_input.dart';
 import '../widgets/calendar_display_selector.dart';
 import '../widgets/action_buttons.dart';
 import '../../domain/models/priority.dart';
-import 'package:scheduleapp/features/schedule/domain/entities/schedule.dart';
+import '../../domain/models/schedule.dart';
 import 'package:scheduleapp/features/schedule/presentation/widgets/date_setting_box.dart';
 
 class AddSchedulePage extends StatefulWidget {
@@ -183,6 +183,8 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
               child: ActionButtons(
                 onCancelPressed: _handleCancel,
                 onSubmitPressed: _handleRegister,
+                cancelText: '취소',
+                submitText: '등록',
               ),
             ),
           ],

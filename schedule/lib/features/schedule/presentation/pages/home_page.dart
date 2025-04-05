@@ -45,11 +45,16 @@ class _HomePageState extends State<HomePage> {
                     label: '리마인더 추가',
                     onTap: () {
                       _toggleMenu();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AddReminderPage(),
-                        ),
-                      );
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        if (mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AddReminderPage(),
+                            ),
+                          );
+                        }
+                      });
                     },
                   ),
                   const SizedBox(height: 10),
@@ -58,11 +63,16 @@ class _HomePageState extends State<HomePage> {
                     label: '일정 추가',
                     onTap: () {
                       _toggleMenu();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AddSchedulePage(),
-                        ),
-                      );
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        if (mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AddSchedulePage(),
+                            ),
+                          );
+                        }
+                      });
                     },
                   ),
                 ],

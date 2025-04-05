@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
       color: Colors.transparent,
       child: Container(
         width: 200,
-        height: 106,
+        height: 48,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
             onTap: onTap,
             borderRadius: BorderRadius.circular(16),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

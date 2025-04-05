@@ -29,16 +29,20 @@ class _HomePageState extends State<HomePage> {
         child: Text('일정 목록이 여기에 표시됩니다.'),
       ),
       floatingActionButton: Stack(
+        alignment: Alignment.bottomRight,
         clipBehavior: Clip.none,
         children: [
           if (_isMenuOpen)
             Positioned(
-              bottom: 60,
+              bottom: 80,
               right: 0,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  GestureDetector(
+                  _buildMenuItem(
+                    icon: Icons.notifications_active,
+                    label: '리마인더 추가',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -46,42 +50,11 @@ class _HomePageState extends State<HomePage> {
                       );
                       _toggleMenu();
                     },
-                    child: Container(
-                      width: 120,
-                      height: 40,
-                      margin: const EdgeInsets.only(bottom: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/reminder_add.png',
-                            width: 24,
-                            height: 24,
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            '리마인더 추가',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
-                  GestureDetector(
+                  const SizedBox(height: 12),
+                  _buildMenuItem(
+                    icon: Icons.calendar_today,
+                    label: '일정 추가',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -89,73 +62,61 @@ class _HomePageState extends State<HomePage> {
                       );
                       _toggleMenu();
                     },
-                    child: Container(
-                      width: 120,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/schedule_add.png',
-                            width: 24,
-                            height: 24,
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            '일정 추가',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ],
               ),
             ),
-          GestureDetector(
-            onTap: _toggleMenu,
-            child: Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: AnimatedRotation(
-                  duration: const Duration(milliseconds: 300),
-                  turns: _isMenuOpen ? 0.125 : 0, // 45도 회전
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ),
+          FloatingActionButton(
+            onPressed: _toggleMenu,
+            child: AnimatedRotation(
+              duration: const Duration(milliseconds: 300),
+              turns: _isMenuOpen ? 0.125 : 0,
+              child: const Icon(Icons.add),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMenuItem({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

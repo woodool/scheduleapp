@@ -1,202 +1,202 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 enum NotificationType {
   none,
-  on,
+  tenMinutes,
+  oneHour,
+  oneDay,
   custom,
 }
 
 class NotificationSettingBox extends StatelessWidget {
   final NotificationType notificationType;
-  final DateTime? customDateTime;
+  final int? customMinutes;
   final ValueChanged<NotificationType>? onTypeChanged;
-  final ValueChanged<DateTime>? onCustomDateTimeChanged;
+  final ValueChanged<int>? onCustomMinutesChanged;
 
   const NotificationSettingBox({
     super.key,
     this.notificationType = NotificationType.none,
-    this.customDateTime,
+    this.customMinutes,
     this.onTypeChanged,
-    this.onCustomDateTimeChanged,
+    this.onCustomMinutesChanged,
   });
 
   String _getNotificationText() {
     switch (notificationType) {
       case NotificationType.none:
-        return 'OFF';
-      case NotificationType.on:
-        return 'ON';
+        return '일정 시작시간';
+      case NotificationType.tenMinutes:
+        return '10분 전';
+      case NotificationType.oneHour:
+        return '1시간 전';
+      case NotificationType.oneDay:
+        return '1일 전';
       case NotificationType.custom:
-        if (customDateTime != null) {
-          return DateFormat('MM/dd HH:mm').format(customDateTime!);
+        if (customMinutes != null) {
+          return '$customMinutes분 전';
         }
-        return '시간 설정';
+        return '직접 설정';
     }
   }
 
   Future<void> _showNotificationSelector(BuildContext context) async {
     NotificationType tempType = notificationType;
-    DateTime tempDateTime = customDateTime ?? DateTime.now();
+    int tempMinutes = customMinutes ?? 5;
     
     await showDialog(
       context: context,
       builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildRadioListTile(
+                    context,
+                    setState,
+                    NotificationType.none,
+                    '일정 시작시간',
+                    tempType,
+                    (value) => tempType = value,
+                  ),
+                  _buildRadioListTile(
+                    context,
+                    setState,
+                    NotificationType.tenMinutes,
+                    '10분 전',
+                    tempType,
+                    (value) => tempType = value,
+                  ),
+                  _buildRadioListTile(
+                    context,
+                    setState,
+                    NotificationType.oneHour,
+                    '1시간 전',
+                    tempType,
+                    (value) => tempType = value,
+                  ),
+                  _buildRadioListTile(
+                    context,
+                    setState,
+                    NotificationType.oneDay,
+                    '1일 전',
+                    tempType,
+                    (value) => tempType = value,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      final result = await _showCustomMinutesSelector(context, tempMinutes);
+                      if (result != null) {
+                        setState(() {
+                          tempType = NotificationType.custom;
+                          tempMinutes = result;
+                        });
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.add_circle_outline,
+                            size: 24,
+                            color: Colors.blue,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            '직접 설정',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('취소'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    onTypeChanged?.call(tempType);
+                    if (tempType == NotificationType.custom) {
+                      onCustomMinutesChanged?.call(tempMinutes);
+                    }
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('확인'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<int?> _showCustomMinutesSelector(BuildContext context, int initialMinutes) async {
+    int selectedMinutes = initialMinutes;
+    
+    return showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            '알림 설정',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+          contentPadding: EdgeInsets.zero,
+          content: Container(
+            height: 200,
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '${selectedMinutes}분',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: CupertinoPicker(
+                    itemExtent: 40,
+                    onSelectedItemChanged: (int index) {
+                      selectedMinutes = index + 1;
+                    },
+                    children: List<Widget>.generate(60, (index) {
+                      return Center(
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ],
             ),
           ),
-          contentPadding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return Container(
-                width: 250,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildOptionTile(
-                      context,
-                      setState,
-                      NotificationType.none,
-                      'OFF',
-                      '알림을 받지 않습니다',
-                      Icons.notifications_off,
-                      tempType,
-                      (value) => tempType = value,
-                    ),
-                    const SizedBox(height: 8),
-                    _buildOptionTile(
-                      context,
-                      setState,
-                      NotificationType.on,
-                      'ON',
-                      '일정 시간에 알림을 받습니다',
-                      Icons.notifications_active,
-                      tempType,
-                      (value) => tempType = value,
-                    ),
-                    const SizedBox(height: 8),
-                    _buildOptionTile(
-                      context,
-                      setState,
-                      NotificationType.custom,
-                      '시간 설정',
-                      '원하는 시간에 알림을 받습니다',
-                      Icons.access_time,
-                      tempType,
-                      (value) => tempType = value,
-                    ),
-                    if (tempType == NotificationType.custom)
-                      Container(
-                        margin: const EdgeInsets.only(top: 16, left: 16),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: [
-                            const Text('알림 시간: ', style: TextStyle(fontSize: 14)),
-                            TextButton(
-                              onPressed: () async {
-                                final DateTime? date = await showDatePicker(
-                                  context: context,
-                                  initialDate: tempDateTime,
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime.now().add(const Duration(days: 365)),
-                                );
-                                if (date != null) {
-                                  setState(() {
-                                    tempDateTime = DateTime(
-                                      date.year,
-                                      date.month,
-                                      date.day,
-                                      tempDateTime.hour,
-                                      tempDateTime.minute,
-                                    );
-                                  });
-                                }
-                              },
-                              style: TextButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: Text(
-                                DateFormat('MM/dd').format(tempDateTime),
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                final TimeOfDay? time = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay(
-                                    hour: tempDateTime.hour,
-                                    minute: tempDateTime.minute,
-                                  ),
-                                );
-                                if (time != null) {
-                                  setState(() {
-                                    tempDateTime = DateTime(
-                                      tempDateTime.year,
-                                      tempDateTime.month,
-                                      tempDateTime.day,
-                                      time.hour,
-                                      time.minute,
-                                    );
-                                  });
-                                }
-                              },
-                              style: TextButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: Text(
-                                DateFormat('HH:mm').format(tempDateTime),
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
-              );
-            },
-          ),
-          actionsPadding: const EdgeInsets.fromLTRB(8, 0, 8, 12),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                minimumSize: const Size(60, 36),
-              ),
-              child: const Text('취소', style: TextStyle(fontSize: 14)),
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('취소'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                onTypeChanged?.call(tempType);
-                if (tempType == NotificationType.custom) {
-                  onCustomDateTimeChanged?.call(tempDateTime);
-                }
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                minimumSize: const Size(60, 36),
-              ),
-              child: const Text('확인', style: TextStyle(fontSize: 14)),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(selectedMinutes),
+              child: Text('확인'),
             ),
           ],
         );
@@ -204,74 +204,27 @@ class NotificationSettingBox extends StatelessWidget {
     );
   }
 
-  Widget _buildOptionTile(
+  Widget _buildRadioListTile(
     BuildContext context,
     StateSetter setState,
     NotificationType type,
     String title,
-    String subtitle,
-    IconData icon,
     NotificationType selectedType,
     Function(NotificationType) onChanged,
   ) {
-    final isSelected = selectedType == type;
-    
-    return InkWell(
-      onTap: () {
+    return RadioListTile<NotificationType>(
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 16),
+      ),
+      value: type,
+      groupValue: selectedType,
+      onChanged: (value) {
         setState(() {
-          onChanged(type);
+          onChanged(value!);
         });
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.blue.withOpacity(0.1) : Colors.transparent,
-          border: Border.all(
-            color: isSelected ? Colors.blue : Colors.grey.shade300,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? Colors.blue : Colors.grey,
-              size: 20,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: isSelected ? Colors.blue : Colors.black,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (isSelected)
-              const Icon(
-                Icons.check_circle,
-                color: Colors.blue,
-                size: 20,
-              ),
-          ],
-        ),
-      ),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16),
     );
   }
 

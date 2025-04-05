@@ -144,10 +144,11 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ActionButtons(
                 onCancelPressed: () {
-                  // TODO: 취소 처리
+                  Navigator.of(context).pop();
                 },
                 onSubmitPressed: () {
-                  // TODO: 수정 처리
+                  // 나중에 DB 연결 시 여기에 일정 수정 로직 추가
+                  Navigator.of(context).pop();
                 },
                 cancelText: '취소',
                 submitText: '수정',

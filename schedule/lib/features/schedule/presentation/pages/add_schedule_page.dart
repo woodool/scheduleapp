@@ -154,10 +154,11 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ActionButtons(
                 onCancelPressed: () {
-                  // TODO: 취소 처리
+                  Navigator.of(context).pop();
                 },
                 onSubmitPressed: () {
-                  // TODO: 등록 처리
+                  // 나중에 DB 연결 시 여기에 일정 저장 로직 추가
+                  Navigator.of(context).pop();
                 },
               ),
             ),

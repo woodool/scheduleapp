@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   _buildMenuItem(
-                    icon: Icons.notifications_active,
+                    imagePath: 'assets/images/reminder_add.png',
                     label: '리마인더 추가',
                     onTap: () {
                       Navigator.push(
@@ -51,9 +51,9 @@ class _HomePageState extends State<HomePage> {
                       _toggleMenu();
                     },
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   _buildMenuItem(
-                    icon: Icons.calendar_today,
+                    imagePath: 'assets/images/schedule_add.png',
                     label: '일정 추가',
                     onTap: () {
                       Navigator.push(
@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildMenuItem({
-    required IconData icon,
+    required String imagePath,
     required String label,
     required VoidCallback onTap,
   }) {
@@ -90,7 +90,8 @@ class _HomePageState extends State<HomePage> {
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          height: 106,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
@@ -104,15 +105,20 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Icon(icon, size: 20),
-              const SizedBox(width: 8),
               Text(
                 label,
                 style: const TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w400,
                 ),
+              ),
+              const SizedBox(width: 12),
+              Image.asset(
+                imagePath,
+                width: 24,
+                height: 24,
               ),
             ],
           ),

@@ -18,8 +18,19 @@ class PrioritySettingBox extends StatelessWidget {
   }
 
   Color _getPriorityColor() {
-    if (selectedPriority == null) return Colors.black;
+    if (selectedPriority == null) return Colors.grey;
     return selectedPriority!.color;
+  }
+
+  Widget _buildPriorityBox(Color color, {double width = 84, double height = 22}) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
   }
 
   Future<void> _showPrioritySelector(BuildContext context) async {
@@ -49,28 +60,7 @@ class PrioritySettingBox extends StatelessWidget {
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 16,
-                            height: 16,
-                            decoration: BoxDecoration(
-                              color: tempPriority.color,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            tempPriority.name,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: tempPriority.color,
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: _buildPriorityBox(tempPriority.color, width: 120, height: 30),
                     ),
                     Expanded(
                       child: Container(
@@ -84,27 +74,7 @@ class PrioritySettingBox extends StatelessWidget {
                           },
                           children: Priority.values.map((priority) {
                             return Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 12,
-                                    height: 12,
-                                    decoration: BoxDecoration(
-                                      color: priority.color,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    priority.name,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              child: _buildPriorityBox(priority.color, width: 100, height: 26),
                             );
                           }).toList(),
                         ),
@@ -161,28 +131,7 @@ class PrioritySettingBox extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: _getPriorityColor(),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    _getPriorityText(),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
+              child: _buildPriorityBox(_getPriorityColor()),
             ),
           ),
         ),

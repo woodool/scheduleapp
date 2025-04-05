@@ -66,38 +66,46 @@ class RepeatSettingBox extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 24),
-                        child: ListView.builder(
-                          itemCount: weekdays.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.grey.shade200,
-                                    width: 1,
+                      child: Center(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            alignment: WrapAlignment.center,
+                            children: List.generate(
+                              weekdays.length,
+                              (index) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    tempSelectedDays[index] = !tempSelectedDays[index];
+                                  });
+                                },
+                                child: Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: tempSelectedDays[index] ? Colors.blue : Colors.transparent,
+                                    border: Border.all(
+                                      color: tempSelectedDays[index] ? Colors.blue : Colors.grey,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      weekdays[index],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: tempSelectedDays[index] ? Colors.white : Colors.grey,
+                                        fontWeight: tempSelectedDays[index] ? FontWeight.bold : FontWeight.normal,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                              child: CheckboxListTile(
-                                title: Text(
-                                  '${weekdays[index]}요일',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                value: tempSelectedDays[index],
-                                onChanged: (bool? value) {
-                                  if (value != null) {
-                                    setState(() {
-                                      tempSelectedDays[index] = value;
-                                    });
-                                  }
-                                },
-                                activeColor: Colors.blue,
-                                contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                              ),
-                            );
-                          },
+                            ),
+                          ),
                         ),
                       ),
                     ),

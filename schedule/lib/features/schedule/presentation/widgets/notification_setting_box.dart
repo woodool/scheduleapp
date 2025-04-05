@@ -221,31 +221,37 @@ class NotificationSettingBox extends StatelessWidget {
                           Container(
                             width: 80,
                             padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            child: CupertinoPicker(
+                              itemExtent: 44,
+                              onSelectedItemChanged: (index) {
+                                setState(() {
+                                  bool newIsMinutes = index == 0;
+                                  if (newIsMinutes != isMinutes) {
+                                    isMinutes = newIsMinutes;
+                                    selectedValue = selectedValue.clamp(0, isMinutes ? 59 : 23);
+                                  }
+                                });
+                              },
                               children: [
-                                _buildUnitButton(
-                                  context,
-                                  '분',
-                                  isMinutes,
-                                  () => setState(() {
-                                    if (!isMinutes) {
-                                      isMinutes = true;
-                                      selectedValue = selectedValue.clamp(0, 59);
-                                    }
-                                  }),
+                                Center(
+                                  child: Text(
+                                    '분',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: isMinutes ? Colors.blue : Colors.black,
+                                      fontWeight: isMinutes ? FontWeight.bold : FontWeight.normal,
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(height: 16),
-                                _buildUnitButton(
-                                  context,
-                                  '시간',
-                                  !isMinutes,
-                                  () => setState(() {
-                                    if (isMinutes) {
-                                      isMinutes = false;
-                                      selectedValue = selectedValue.clamp(0, 23);
-                                    }
-                                  }),
+                                Center(
+                                  child: Text(
+                                    '시간',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: !isMinutes ? Colors.blue : Colors.black,
+                                      fontWeight: !isMinutes ? FontWeight.bold : FontWeight.normal,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),

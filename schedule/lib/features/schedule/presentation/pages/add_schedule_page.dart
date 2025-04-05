@@ -120,6 +120,11 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                           const SizedBox(width: 35),
                           PrioritySettingBox(
                             selectedPriority: _selectedPriority,
+                            onPriorityChanged: (priority) {
+                              setState(() {
+                                _selectedPriority = priority;
+                              });
+                            },
                           ),
                         ],
                       ),

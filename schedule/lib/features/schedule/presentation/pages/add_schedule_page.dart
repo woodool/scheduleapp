@@ -22,7 +22,8 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   final _memoController = TextEditingController();
   DateTime _startDate = DateTime(2023, 12, 12, 22); // 12월 12일 오후 10시
   DateTime _endDate = DateTime(2023, 12, 15, 23);   // 12월 15일 오후 11시
-  List<bool> _selectedDays = [false, false, false, false, false, false, false];
+  RepeatType _repeatType = RepeatType.none;
+  int? _monthlyDay;
   NotificationType _notificationType = NotificationType.none;
   DateTime? _customDateTime;
   String? _selectedCategory;
@@ -39,120 +40,107 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
-                      TitleInput(
-                        controller: _titleController,
-                        onChanged: (value) {
-                          // TODO: 제목 변경 처리
-                        },
-                      ),
-                      const SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          DateTimeSelector(
-                            startDate: _startDate,
-                            endDate: _endDate,
-                            onStartDateChanged: (date) {
-                              setState(() {
-                                _startDate = date;
-                              });
-                            },
-                            onEndDateChanged: (date) {
-                              setState(() {
-                                _endDate = date;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RepeatSettingBox(
-                            selectedDays: _selectedDays,
-                            onDaysChanged: (days) {
-                              setState(() {
-                                _selectedDays = days;
-                              });
-                            },
-                          ),
-                          const SizedBox(width: 35),
-                          NotificationSettingBox(
-                            notificationType: _notificationType,
-                            customDateTime: _customDateTime,
-                            onTypeChanged: (type) {
-                              setState(() {
-                                _notificationType = type;
-                              });
-                            },
-                            onCustomDateTimeChanged: (dateTime) {
-                              setState(() {
-                                _customDateTime = dateTime;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CategorySettingBox(
-                            selectedCategory: _selectedCategory,
-                          ),
-                          const SizedBox(width: 35),
-                          PrioritySettingBox(
-                            selectedPriority: _selectedPriority,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 32),
-                      MemoInput(
-                        controller: _memoController,
-                        onChanged: (value) {
-                          // TODO: 메모 변경 처리
-                        },
-                      ),
-                      const SizedBox(height: 32),
-                      CalendarDisplaySelector(
-                        selectedType: _calendarDisplayType,
-                        onTypeSelected: (type) {
-                          setState(() {
-                            _calendarDisplayType = type;
-                          });
-                        },
-                      ),
-                    ],
+      appBar: AppBar(
+        title: const Text('일정 추가'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TitleInput(
+                controller: _titleController,
+              ),
+              const SizedBox(height: 20),
+              DateTimeSelector(
+                startDate: _startDate,
+                endDate: _endDate,
+                onStartDateChanged: (date) {
+                  setState(() {
+                    _startDate = date;
+                  });
+                },
+                onEndDateChanged: (date) {
+                  setState(() {
+                    _endDate = date;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RepeatSettingBox(
+                    repeatType: _repeatType,
+                    monthlyDay: _monthlyDay,
+                    onTypeChanged: (type) {
+                      setState(() {
+                        _repeatType = type;
+                      });
+                    },
+                    onMonthlyDayChanged: (day) {
+                      setState(() {
+                        _monthlyDay = day;
+                      });
+                    },
                   ),
-                ),
+                  const SizedBox(width: 35),
+                  NotificationSettingBox(
+                    notificationType: _notificationType,
+                    customDateTime: _customDateTime,
+                    onTypeChanged: (type) {
+                      setState(() {
+                        _notificationType = type;
+                      });
+                    },
+                    onCustomDateTimeChanged: (dateTime) {
+                      setState(() {
+                        _customDateTime = dateTime;
+                      });
+                    },
+                  ),
+                ],
               ),
-            ),
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: ActionButtons(
-                onCancelPressed: () {
-                  // TODO: 취소 처리
-                },
-                onSubmitPressed: () {
-                  // TODO: 등록 처리
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CategorySettingBox(
+                    selectedCategory: _selectedCategory,
+                  ),
+                  const SizedBox(width: 35),
+                  PrioritySettingBox(
+                    selectedPriority: _selectedPriority,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              MemoInput(
+                controller: _memoController,
+                onChanged: (value) {
+                  // TODO: 메모 변경 처리
                 },
               ),
-            ),
-          ],
+              const SizedBox(height: 32),
+              CalendarDisplaySelector(
+                selectedType: _calendarDisplayType,
+                onTypeSelected: (type) {
+                  setState(() {
+                    _calendarDisplayType = type;
+                  });
+                },
+              ),
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // TODO: 등록 처리
+        },
+        child: const Icon(Icons.check),
       ),
     );
   }

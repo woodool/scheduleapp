@@ -110,9 +110,9 @@ class _HomePageState extends State<HomePage> {
             onTap: onTap,
             borderRadius: BorderRadius.circular(16),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
                     label,
@@ -122,18 +122,19 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.black,
                     ),
                   ),
+                  const SizedBox(width: 8),
                   Container(
-                    width: 32,
-                    height: 32,
+                    width: 48,
+                    height: 48,
                     decoration: BoxDecoration(
                       color: const Color(0xFFF5F6FA),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(24),
                     ),
                     child: Center(
                       child: Image.asset(
                         imagePath,
-                        width: 24,
-                        height: 24,
+                        width: 48,
+                        height: 48,
                       ),
                     ),
                   ),

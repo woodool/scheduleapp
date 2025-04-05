@@ -29,10 +29,11 @@ class _HomePageState extends State<HomePage> {
         child: Text('일정 목록이 여기에 표시됩니다.'),
       ),
       floatingActionButton: Stack(
+        clipBehavior: Clip.none,
         children: [
           if (_isMenuOpen)
             Positioned(
-              bottom: 80,
+              bottom: 60,
               right: 0,
               child: Column(
                 mainAxisSize: MainAxisSize.min,

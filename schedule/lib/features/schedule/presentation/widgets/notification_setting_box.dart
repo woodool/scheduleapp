@@ -50,7 +50,7 @@ class NotificationSettingBox extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          contentPadding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
           content: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -62,7 +62,7 @@ class NotificationSettingBox extends StatelessWidget {
                       title: const Text('OFF', style: TextStyle(fontSize: 14)),
                       value: NotificationType.none,
                       groupValue: tempType,
-                      contentPadding: EdgeInsets.zero,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
                       onChanged: (value) {
                         setState(() {
                           tempType = value!;
@@ -73,7 +73,7 @@ class NotificationSettingBox extends StatelessWidget {
                       title: const Text('ON', style: TextStyle(fontSize: 14)),
                       value: NotificationType.on,
                       groupValue: tempType,
-                      contentPadding: EdgeInsets.zero,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
                       onChanged: (value) {
                         setState(() {
                           tempType = value!;
@@ -84,7 +84,7 @@ class NotificationSettingBox extends StatelessWidget {
                       title: const Text('시간 설정', style: TextStyle(fontSize: 14)),
                       value: NotificationType.custom,
                       groupValue: tempType,
-                      contentPadding: EdgeInsets.zero,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4),
                       onChanged: (value) {
                         setState(() {
                           tempType = value!;
@@ -93,7 +93,7 @@ class NotificationSettingBox extends StatelessWidget {
                     ),
                     if (tempType == NotificationType.custom)
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                        padding: const EdgeInsets.only(left: 16.0, top: 12.0, bottom: 8.0),
                         child: Row(
                           children: [
                             const Text('알림 시간: ', style: TextStyle(fontSize: 14)),
@@ -166,7 +166,7 @@ class NotificationSettingBox extends StatelessWidget {
               );
             },
           ),
-          actionsPadding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+          actionsPadding: const EdgeInsets.fromLTRB(8, 0, 8, 12),
           actions: [
             TextButton(
               onPressed: () {

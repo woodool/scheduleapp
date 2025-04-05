@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'add_schedule_page.dart';
-import 'add_reminder_page.dart';
+import 'package:schedule/features/schedule/presentation/pages/add_schedule_page.dart';
+import 'package:schedule/features/schedule/presentation/pages/add_reminder_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -44,11 +44,12 @@ class _HomePageState extends State<HomePage> {
                     imagePath: 'assets/images/reminder_add.png',
                     label: '리마인더 추가',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AddReminderPage()),
-                      );
                       _toggleMenu();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AddReminderPage(),
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(height: 10),
@@ -56,11 +57,12 @@ class _HomePageState extends State<HomePage> {
                     imagePath: 'assets/images/schedule_add.png',
                     label: '일정 추가',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AddSchedulePage()),
-                      );
                       _toggleMenu();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AddSchedulePage(),
+                        ),
+                      );
                     },
                   ),
                 ],

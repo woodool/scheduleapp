@@ -24,7 +24,7 @@ class RepeatSettingBox extends StatelessWidget {
       }
     }
     
-    if (selectedWeekdays.length >= 5) {
+    if (selectedWeekdays.length >= 4) {
       return '매주 ${selectedWeekdays.length}일';
     }
     

@@ -37,84 +37,72 @@ class _HomePageState extends State<HomePage> {
             Positioned(
               bottom: 68,
               right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _toggleMenu();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const AddReminderPage()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          '리마인더 추가',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 1.4,
+                            letterSpacing: -0.025,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Image.asset(
+                          'assets/images/add_reminder.png',
+                          width: 48,
+                          height: 48,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        _toggleMenu();
-                        Navigator.pushNamed(context, '/add_reminder');
-                      },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            '리마인더 추가',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              height: 1.4,
-                              letterSpacing: -0.025,
-                              color: Colors.black,
-                            ),
+                  ),
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      _toggleMenu();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const AddSchedulePage()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          '일정 추가',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 1.4,
+                            letterSpacing: -0.025,
+                            color: Colors.black,
                           ),
-                          const SizedBox(width: 12),
-                          Image.asset(
-                            'assets/images/add_reminder.png',
-                            width: 48,
-                            height: 48,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 12),
+                        Image.asset(
+                          'assets/images/add_schedule.png',
+                          width: 48,
+                          height: 48,
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () {
-                        _toggleMenu();
-                        Navigator.pushNamed(context, '/add_schedule');
-                      },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            '일정 추가',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              height: 1.4,
-                              letterSpacing: -0.025,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Image.asset(
-                            'assets/images/add_schedule.png',
-                            width: 48,
-                            height: 48,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           Container(

@@ -41,73 +41,59 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  InkWell(
+                  GestureDetector(
                     onTap: () {
                       _toggleMenu();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AddReminderPage(),
-                        ),
-                      );
+                      Navigator.pushNamed(context, '/add_reminder');
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            '리마인더 추가',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              height: 1.4,
-                              letterSpacing: -0.025,
-                              color: Colors.black,
-                            ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          '리마인더 추가',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 1.4,
+                            letterSpacing: -0.025,
+                            color: Colors.black,
                           ),
-                          const SizedBox(width: 12),
-                          Image.asset(
-                            'assets/images/add_reminder.png',
-                            width: 48,
-                            height: 48,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 12),
+                        Image.asset(
+                          'assets/images/add_reminder.png',
+                          width: 48,
+                          height: 48,
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 10),
-                  InkWell(
+                  GestureDetector(
                     onTap: () {
                       _toggleMenu();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AddSchedulePage(),
-                        ),
-                      );
+                      Navigator.pushNamed(context, '/add_schedule');
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            '일정 추가',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              height: 1.4,
-                              letterSpacing: -0.025,
-                              color: Colors.black,
-                            ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          '일정 추가',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 1.4,
+                            letterSpacing: -0.025,
+                            color: Colors.black,
                           ),
-                          const SizedBox(width: 12),
-                          Image.asset(
-                            'assets/images/add_schedule.png',
-                            width: 48,
-                            height: 48,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 12),
+                        Image.asset(
+                          'assets/images/add_schedule.png',
+                          width: 48,
+                          height: 48,
+                        ),
+                      ],
                     ),
                   ),
                 ],

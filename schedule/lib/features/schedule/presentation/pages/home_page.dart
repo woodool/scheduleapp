@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'calendar_page.dart';
+import 'meeting_page.dart';
+import 'settings_page.dart';
+import '../widgets/bottom_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -8,7 +12,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
   bool _isMenuOpen = false;
+
+  final List<Widget> _pages = [
+    const _HomeContent(),
+    const CalendarPage(),
+    const MeetingPage(),
+    const SettingsPage(),
+  ];
 
   void _toggleMenu() {
     setState(() {
@@ -24,11 +36,28 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('일정 관리'),
       ),
-      body: const Center(
-        child: Text('일정 목록이 여기에 표시됩니다.'),
+      body: Stack(
+        children: [
+          _pages[_currentIndex],
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 32,
+            child: Center(
+              child: BottomNavBar(
+                currentIndex: _currentIndex,
+                onTap: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 40),
+        padding: const EdgeInsets.only(bottom: 100),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -46,14 +75,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        print('리마인더 추가 버튼 탭됨!');
                         _toggleMenu();
-                        print('메뉴 토글됨: $_isMenuOpen');
                         Navigator.pushNamed(context, '/add_reminder');
-                        print('네비게이션 시도됨');
                       },
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.only(left: 12, right: 0, top: 2, bottom: 5),
+                        padding: const EdgeInsets.only(left: 12, right: 0, top: 8, bottom: 8),
                         backgroundColor: Colors.transparent,
                         foregroundColor: Colors.black,
                         minimumSize: Size.zero,
@@ -61,7 +87,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const Text(
                             '리마인더 추가',
@@ -105,14 +130,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        print('일정 추가 버튼 탭됨!');
                         _toggleMenu();
-                        print('메뉴 토글됨: $_isMenuOpen');
                         Navigator.pushNamed(context, '/add_schedule');
-                        print('네비게이션 시도됨');
                       },
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.only(left: 12, right: 0, top: 2, bottom: 5),
+                        padding: const EdgeInsets.only(left: 12, right: 0, top: 8, bottom: 8),
                         backgroundColor: Colors.transparent,
                         foregroundColor: Colors.black,
                         minimumSize: Size.zero,
@@ -120,7 +142,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const Text(
                             '일정 추가',
@@ -187,7 +208,17 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+}
+
+class _HomeContent extends StatelessWidget {
+  const _HomeContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('일정 목록이 여기에 표시됩니다.'),
     );
   }
 }

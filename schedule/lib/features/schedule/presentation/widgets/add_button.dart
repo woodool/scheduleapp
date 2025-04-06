@@ -111,10 +111,15 @@ class _AddButtonState extends State<AddButton> {
                 MaterialPageRoute(builder: (context) => item.page),
               );
             },
-            child: Image.asset(
-              item.imagePath,
+            customBorder: const CircleBorder(),
+            child: Container(
               width: 48,
               height: 48,
+              child: Image.asset(
+                item.imagePath,
+                width: 48,
+                height: 48,
+              ),
             ),
           ),
         ),

@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),
-        'add_reminder_page': (context) => const AddReminderPage(),
-        'add_schedule_page': (context) => const AddSchedulePage(),
+        '/add_reminder': (context) => const AddReminderPage(),
+        '/add_schedule': (context) => const AddSchedulePage(),
       },
     );
   }

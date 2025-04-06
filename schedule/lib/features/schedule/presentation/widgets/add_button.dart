@@ -87,48 +87,39 @@ class _AddButtonState extends State<AddButton> {
   }
 
   Widget _buildMenuItem(BuildContext context, MenuItem item) {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      elevation: 4,
+      child: InkWell(
+        onTap: () {
+          _toggleMenu();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => item.page),
+          );
+        },
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(
-              item.label,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                height: 1.4,
-                letterSpacing: -0.025,
-                color: Colors.black,
+        child: Container(
+          height: 48,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Text(
+                  item.label,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 1.4,
+                    letterSpacing: -0.025,
+                    color: Colors.black,
+                  ),
+                ),
               ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                _toggleMenu();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => item.page),
-                );
-              },
-              customBorder: const CircleBorder(),
-              child: Ink(
+              const SizedBox(width: 12),
+              Container(
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
@@ -147,9 +138,9 @@ class _AddButtonState extends State<AddButton> {
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

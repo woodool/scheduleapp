@@ -115,31 +115,27 @@ class _AddButtonState extends State<AddButton> {
             ),
           ),
           const SizedBox(width: 12),
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                _toggleMenu();
-                item.onTap(context);
-              },
-              customBorder: const CircleBorder(),
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(
-                    color: const Color(0xFF0062FF),
-                    width: 1,
-                  ),
+          GestureDetector(
+            onTap: () {
+              _toggleMenu();
+              item.onTap(context);
+            },
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                border: Border.all(
+                  color: const Color(0xFF0062FF),
+                  width: 1,
                 ),
-                child: Center(
-                  child: Image.asset(
-                    item.imagePath,
-                    width: 24,
-                    height: 24,
-                  ),
+              ),
+              child: Center(
+                child: Image.asset(
+                  item.imagePath,
+                  width: 24,
+                  height: 24,
                 ),
               ),
             ),

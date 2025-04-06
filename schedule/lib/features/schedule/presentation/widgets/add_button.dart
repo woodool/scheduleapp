@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../pages/add_reminder_page.dart';
-import '../pages/add_schedule_page.dart';
 
 class MenuItem {
   final String imagePath;
@@ -101,26 +99,18 @@ class _AddButtonState extends State<AddButton> {
           ),
         ),
         const SizedBox(width: 12),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              _toggleMenu();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => item.page),
-              );
-            },
-            customBorder: const CircleBorder(),
-            child: Container(
-              width: 48,
-              height: 48,
-              child: Image.asset(
-                item.imagePath,
-                width: 48,
-                height: 48,
-              ),
-            ),
+        GestureDetector(
+          onTap: () {
+            _toggleMenu();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => item.page),
+            );
+          },
+          child: Image.asset(
+            item.imagePath,
+            width: 48,
+            height: 48,
           ),
         ),
       ],

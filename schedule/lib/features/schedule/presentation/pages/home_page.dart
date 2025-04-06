@@ -41,63 +41,75 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      _toggleMenu();
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Navigator.pushNamed(context, '/add_reminder');
-                      });
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          '리마인더 추가',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            height: 1.4,
-                            letterSpacing: -0.025,
-                            color: Colors.black,
-                          ),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        _toggleMenu();
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Navigator.pushNamed(context, '/add_reminder');
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              '리마인더 추가',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                height: 1.4,
+                                letterSpacing: -0.025,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Image.asset(
+                              'assets/images/add_reminder.png',
+                              width: 48,
+                              height: 48,
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 12),
-                        Image.asset(
-                          'assets/images/add_reminder.png',
-                          width: 48,
-                          height: 48,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      _toggleMenu();
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Navigator.pushNamed(context, '/add_schedule');
-                      });
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          '일정 추가',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            height: 1.4,
-                            letterSpacing: -0.025,
-                            color: Colors.black,
-                          ),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        _toggleMenu();
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Navigator.pushNamed(context, '/add_schedule');
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              '일정 추가',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                height: 1.4,
+                                letterSpacing: -0.025,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Image.asset(
+                              'assets/images/add_schedule.png',
+                              width: 48,
+                              height: 48,
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 12),
-                        Image.asset(
-                          'assets/images/add_schedule.png',
-                          width: 48,
-                          height: 48,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],

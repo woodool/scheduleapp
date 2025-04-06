@@ -121,9 +121,4 @@ class _AddButtonState extends State<AddButton> {
       ),
     );
   }
-<<<<<<< HEAD
-} 
-
-=======
-} 
->>>>>>> 588f3265235c9bb1c8c40cb9dfca825644834372
+}

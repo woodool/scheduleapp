@@ -21,26 +21,12 @@ class HomePage extends StatelessWidget {
           MenuItem(
             imagePath: 'assets/images/add_reminder.png',
             label: '리마인더 추가',
-            onTap: (context) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddReminderPage(),
-                ),
-              );
-            },
+            page: const AddReminderPage(),
           ),
           MenuItem(
             imagePath: 'assets/images/add_schedule.png',
             label: '일정 추가',
-            onTap: (context) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddSchedulePage(),
-                ),
-              );
-            },
+            page: const AddSchedulePage(),
           ),
         ],
       ),

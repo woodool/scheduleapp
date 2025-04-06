@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import '../pages/add_reminder_page.dart';
+import '../pages/add_schedule_page.dart';
 
 class MenuItem {
   final String imagePath;
   final String label;
-  final Function(BuildContext) onTap;
+  final Widget page;
 
   const MenuItem({
     required this.imagePath,
     required this.label,
-    required this.onTap,
+    required this.page,
   });
 }
 
@@ -120,7 +122,10 @@ class _AddButtonState extends State<AddButton> {
             child: InkWell(
               onTap: () {
                 _toggleMenu();
-                item.onTap(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => item.page),
+                );
               },
               customBorder: const CircleBorder(),
               child: Ink(

@@ -22,13 +22,13 @@ class HomePage extends StatelessWidget {
           MenuItem(
             imagePath: 'assets/images/add_reminder.png',
             label: '리마인더 추가',
-            routeName: '/add_reminder',
+            routeName: 'add_reminder_page',
             page: const AddReminderPage(),
           ),
           MenuItem(
             imagePath: 'assets/images/add_schedule.png',
             label: '일정 추가',
-            routeName: '/add_schedule',
+            routeName: 'add_schedule_page',
             page: const AddSchedulePage(),
           ),
         ],

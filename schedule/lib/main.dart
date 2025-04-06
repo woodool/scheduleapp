@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'features/schedule/presentation/pages/home_page.dart';
+import 'features/schedule/presentation/pages/add_reminder_page.dart';
+import 'features/schedule/presentation/pages/add_schedule_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +26,12 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [
         Locale('ko', 'KR'),
       ],
-      home: const HomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        'add_reminder_page': (context) => const AddReminderPage(),
+        'add_schedule_page': (context) => const AddSchedulePage(),
+      },
     );
   }
 }

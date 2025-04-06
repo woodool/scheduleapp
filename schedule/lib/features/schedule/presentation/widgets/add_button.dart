@@ -72,8 +72,8 @@ class _AddButtonState extends State<AddButton> {
                   turns: _isMenuOpen ? 0.125 : 0,
                   child: Image.asset(
                     'assets/images/add.png',
-                    width: 24,
-                    height: 24,
+                    width: 18,
+                    height: 18,
                     color: Colors.white,
                   ),
                 ),

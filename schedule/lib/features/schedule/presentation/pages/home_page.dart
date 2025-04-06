@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                         print('네비게이션 시도됨');
                       },
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.only(left: 12, right: 5, top: 8, bottom: 8),
+                        padding: const EdgeInsets.only(left: 12, right: 0, top: 2, bottom: 5),
                         backgroundColor: Colors.transparent,
                         foregroundColor: Colors.black,
                         minimumSize: Size.zero,
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                         print('네비게이션 시도됨');
                       },
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.only(left: 12, right: 5, top: 8, bottom: 8),
+                        padding: const EdgeInsets.only(left: 12, right: 0, top: 2, bottom: 5),
                         backgroundColor: Colors.transparent,
                         foregroundColor: Colors.black,
                         minimumSize: Size.zero,

@@ -59,7 +59,7 @@ class NotificationSettingBox extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               content: Container(
                 width: 300,
-                height: 320,
+                height: 338,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -184,7 +184,7 @@ class NotificationSettingBox extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               content: Container(
                 width: 300,
-                height: 320,
+                height: 338,
                 child: Column(
                   children: [
                     Container(

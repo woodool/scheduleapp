@@ -70,11 +70,10 @@ class _AddButtonState extends State<AddButton> {
                 child: AnimatedRotation(
                   duration: const Duration(milliseconds: 300),
                   turns: _isMenuOpen ? 0.125 : 0,
-                  child: Image.asset(
-                    'assets/images/add.png',
-                    width: 18,
-                    height: 18,
+                  child: const Icon(
+                    Icons.add,
                     color: Colors.white,
+                    size: 18,
                   ),
                 ),
               ),
@@ -99,32 +98,32 @@ class _AddButtonState extends State<AddButton> {
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            _toggleMenu();
-            item.onTap();
-          },
-          borderRadius: BorderRadius.circular(8),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Text(
-                  item.label,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    height: 1.4,
-                    letterSpacing: -0.025,
-                    color: Colors.black,
-                  ),
-                ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Text(
+              item.label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                height: 1.4,
+                letterSpacing: -0.025,
+                color: Colors.black,
               ),
-              const SizedBox(width: 12),
-              Container(
+            ),
+          ),
+          const SizedBox(width: 12),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                _toggleMenu();
+                item.onTap();
+              },
+              customBorder: const CircleBorder(),
+              child: Container(
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
@@ -143,9 +142,9 @@ class _AddButtonState extends State<AddButton> {
                   ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

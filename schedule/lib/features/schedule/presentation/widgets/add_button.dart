@@ -73,7 +73,7 @@ class _AddButtonState extends State<AddButton> {
                   child: const Icon(
                     Icons.add,
                     color: Colors.white,
-                    size: 18,
+                    size: 24,
                   ),
                 ),
               ),

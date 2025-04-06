@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'add_reminder_page.dart';
-import 'add_schedule_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,23 +27,41 @@ class _HomePageState extends State<HomePage> {
       body: const Center(
         child: Text('일정 목록이 여기에 표시됩니다.'),
       ),
-      floatingActionButton: Stack(
-        alignment: Alignment.bottomRight,
-        clipBehavior: Clip.none,
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (_isMenuOpen)
-            Positioned(
-              bottom: 68,
-              right: 0,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () {
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      print('리마인더 추가 버튼 탭됨!');
                       _toggleMenu();
+                      print('메뉴 토글됨: $_isMenuOpen');
                       Navigator.pushNamed(context, '/add_reminder');
+                      print('네비게이션 시도됨');
                     },
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.black,
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -68,12 +84,33 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      print('일정 추가 버튼 탭됨!');
                       _toggleMenu();
+                      print('메뉴 토글됨: $_isMenuOpen');
                       Navigator.pushNamed(context, '/add_schedule');
+                      print('네비게이션 시도됨');
                     },
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.black,
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -96,8 +133,8 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           Container(
             width: 48,

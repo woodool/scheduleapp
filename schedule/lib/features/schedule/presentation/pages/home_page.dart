@@ -44,10 +44,7 @@ class _HomePageState extends State<HomePage> {
                   GestureDetector(
                     onTap: () {
                       _toggleMenu();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const AddReminderPage()),
-                      );
+                      Navigator.pushNamed(context, '/add_reminder');
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -75,10 +72,7 @@ class _HomePageState extends State<HomePage> {
                   GestureDetector(
                     onTap: () {
                       _toggleMenu();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const AddSchedulePage()),
-                      );
+                      Navigator.pushNamed(context, '/add_schedule');
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,

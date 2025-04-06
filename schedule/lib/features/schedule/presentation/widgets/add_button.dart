@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class MenuItem {
   final String imagePath;
   final String label;
+  final String routeName;
   final Widget page;
 
   const MenuItem({
     required this.imagePath,
     required this.label,
+    required this.routeName,
     required this.page,
   });
 }
@@ -85,36 +87,43 @@ class _AddButtonState extends State<AddButton> {
   }
 
   Widget _buildMenuItem(BuildContext context, MenuItem item) {
-    return GestureDetector(
-      onTap: () {
-        _toggleMenu();
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => item.page),
-        );
-      },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            item.label,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              height: 1.4,
-              letterSpacing: -0.025,
-              color: Colors.black,
-            ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          _toggleMenu();
+          Navigator.pushNamed(context, item.routeName);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                item.label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 1.4,
+                  letterSpacing: -0.025,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Image.asset(
+                item.imagePath,
+                width: 48,
+                height: 48,
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Image.asset(
-            item.imagePath,
-            width: 48,
-            height: 48,
-          ),
-        ],
+        ),
       ),
     );
   }
+<<<<<<< HEAD
 } 
 
+=======
+} 
+>>>>>>> 588f3265235c9bb1c8c40cb9dfca825644834372

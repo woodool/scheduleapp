@@ -87,59 +87,62 @@ class _AddButtonState extends State<AddButton> {
   }
 
   Widget _buildMenuItem(BuildContext context, MenuItem item) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(8),
-      elevation: 4,
-      child: InkWell(
-        onTap: () {
-          _toggleMenu();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => item.page),
-          );
-        },
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          height: 48,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Text(
-                  item.label,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    height: 1.4,
-                    letterSpacing: -0.025,
-                    color: Colors.black,
-                  ),
+    return GestureDetector(
+      onTap: () {
+        _toggleMenu();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => item.page),
+        );
+      },
+      child: Container(
+        height: 48,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              item.label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                height: 1.4,
+                letterSpacing: -0.025,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                border: Border.all(
+                  color: const Color(0xFF0062FF),
+                  width: 1,
                 ),
               ),
-              const SizedBox(width: 12),
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(
-                    color: const Color(0xFF0062FF),
-                    width: 1,
-                  ),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    item.imagePath,
-                    width: 24,
-                    height: 24,
-                  ),
+              child: Center(
+                child: Image.asset(
+                  item.imagePath,
+                  width: 24,
+                  height: 24,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

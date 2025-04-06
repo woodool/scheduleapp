@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MenuItem {
   final String imagePath;
   final String label;
-  final VoidCallback onTap;
+  final Function(BuildContext) onTap;
 
   const MenuItem({
     required this.imagePath,
@@ -49,7 +49,7 @@ class _AddButtonState extends State<AddButton> {
               children: [
                 for (int i = 0; i < widget.menuItems.length; i++) ...[
                   if (i > 0) const SizedBox(height: 10),
-                  _buildMenuItem(widget.menuItems[i]),
+                  _buildMenuItem(context, widget.menuItems[i]),
                 ],
               ],
             ),
@@ -84,7 +84,7 @@ class _AddButtonState extends State<AddButton> {
     );
   }
 
-  Widget _buildMenuItem(MenuItem item) {
+  Widget _buildMenuItem(BuildContext context, MenuItem item) {
     return Container(
       height: 48,
       decoration: BoxDecoration(
@@ -120,7 +120,7 @@ class _AddButtonState extends State<AddButton> {
             child: InkWell(
               onTap: () {
                 _toggleMenu();
-                item.onTap();
+                item.onTap(context);
               },
               customBorder: const CircleBorder(),
               child: Container(

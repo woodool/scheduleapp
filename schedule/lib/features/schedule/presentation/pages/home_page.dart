@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
           MenuItem(
             imagePath: 'assets/images/add_reminder.png',
             label: '리마인더 추가',
-            onTap: () {
+            onTap: (context) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
           MenuItem(
             imagePath: 'assets/images/add_schedule.png',
             label: '일정 추가',
-            onTap: () {
+            onTap: (context) {
               Navigator.push(
                 context,
                 MaterialPageRoute(

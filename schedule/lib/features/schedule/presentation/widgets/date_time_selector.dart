@@ -88,6 +88,7 @@ class DateTimeSelector extends StatelessWidget {
                       height: 22,
                       child: Text(
                         '${startDate.month}월 ${startDate.day}일 (${_getWeekday(startDate)})',
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -102,7 +103,7 @@ class DateTimeSelector extends StatelessWidget {
                       width: 98,
                       height: 22,
                       child: Text(
-                        '오후 ${startDate.hour > 12 ? startDate.hour - 12 : startDate.hour}시',
+                        '${startDate.hour < 12 ? '오전' : '오후'} ${startDate.hour > 12 ? startDate.hour - 12 : startDate.hour}시 ${startDate.minute}분',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 14,
@@ -141,6 +142,7 @@ class DateTimeSelector extends StatelessWidget {
                       height: 22,
                       child: Text(
                         '${endDate.month}월 ${endDate.day}일 (${_getWeekday(endDate)})',
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -155,7 +157,7 @@ class DateTimeSelector extends StatelessWidget {
                       width: 98,
                       height: 22,
                       child: Text(
-                        '오후 ${endDate.hour > 12 ? endDate.hour - 12 : endDate.hour}시',
+                        '${endDate.hour < 12 ? '오전' : '오후'} ${endDate.hour > 12 ? endDate.hour - 12 : endDate.hour}시 ${endDate.minute}분',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 14,

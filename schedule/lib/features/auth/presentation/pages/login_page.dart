@@ -71,11 +71,11 @@ class _LoginPageState extends State<LoginPage> {
               key: _formKey,
               child: Column(
                 children: [
-                  const SizedBox(height: 80),
+                  const SizedBox(height: 40),
                   // TimeHomie 로고 텍스트
                   Container(
                     width: 280,
-                    height: 80,
+                    height: 60,
                     alignment: Alignment.center,
                     child: Text(
                       'TimeHomie',
@@ -91,17 +91,17 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   // 로그인 이미지
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Image.asset(
                       'assets/images/loginpage.png',
-                      width: 200,
-                      height: 200,
+                      width: 160,
+                      height: 160,
                     ),
                   ),
                   // 하단 컨테이너
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 480,
+                    height: 460,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: const BorderRadius.only(
@@ -255,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 24),
+                            const SizedBox(height: 48),
                             // 로그인 버튼
                             GestureDetector(
                               onTap: _handleLogin,
@@ -281,7 +281,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 36),
+                            const SizedBox(height: 30),
                             // 회원가입 링크
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

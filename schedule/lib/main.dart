@@ -5,6 +5,7 @@ import 'features/schedule/presentation/pages/home_page.dart';
 import 'features/schedule/presentation/pages/add_reminder_page.dart';
 import 'features/schedule/presentation/pages/add_schedule_page.dart';
 import 'features/auth/presentation/pages/login_page.dart';
+import 'features/auth/presentation/pages/signup_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
         '/home': (context) => const HomePage(),
         '/add_reminder': (context) => const AddReminderPage(),
         '/add_schedule': (context) => const AddSchedulePage(),
